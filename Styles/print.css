@@ -1,0 +1,11 @@
+/* 
+    Created on : Jun 23, 2015, 7:30:07 PM
+    Author     : Iyad Ismael
+*/
+
+@media print {
+  /* style sheet for print goes here */
+  .node-links, 
+  .hide-from-printer{  display:none; }
+}
+
