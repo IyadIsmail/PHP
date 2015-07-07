@@ -3,45 +3,25 @@ session_start();
 require_once 'cookies.php';
 require_once 'config.php';
 
-$errors = array();
-$err = 0;
-
 if(isset($_POST["iebugaround"])){
-//lets fetch posted details
-$studentname = $_POST['studentname'];
-$studentID = $_POST['studentID'];
-
-//check studentname is present and alphabetic
-    if(empty($studentname) || (!ctype_alpha ($studentname))){
-    //let echo error message
-    $errors[] = "Please input a Student Name";
-    $err = 1;
-    }
- //check studentid is present and numeric
-    if(empty($studentID) || (!ctype_digit ($studentID))){
-    //let echo error message
-    $errors[] = "Please input a Student ID";
-    $err = 2;
-    }   
-    // Check if Id is already in
-    mysql_connect($host, $username, $password) or
-        die("Could not connect: " . mysql_error());
-    mysql_select_db($db_name);
-    $result = mysql_query("SELECT sn FROM tt1 where sid = $studentID");
-    $row = mysql_fetch_row($result);
-    if (mysql_num_rows($result)> 0) {
-        $errors[] = "Please input another Student ID, There is a Student exist with the current ID";
-        $err = 3;
-    }
-    
-    if(!$errors){
-    $_SESSION['studentname'] = $_POST['studentname'];
-    $_SESSION['studentID'] = $_POST['studentID'];
+    $term = $_POST['term'];
+    $year = $_POST['year'];
     $_SESSION['term'] = $_POST['term'];
     $_SESSION['year'] = $_POST['year'];
-    returnheader("NewStudentNotes.php");
+    if ($year == 'y'){
+        $y = date('Y');
+    }elseif ($year == 'y1'){
+        $y1 = date('Y');
+        $y = $y1+1;
+    }else{
+        $y1 = date('Y');
+        $y = $y1+2;
+    }
+    if ($_POST['Show']) {
+     header('Location: ShowStats.php');
     }
 }
+
 ?>
 <html>
     <head>
@@ -74,14 +54,6 @@ $studentID = $_POST['studentID'];
                 <table>
                     <tr> 
                         <td>
-                            <label>&emsp;Student Name</label>
-                            <fieldset class="fieldset3"><input type="text" name="studentname" class="requiredField1" /></fieldset>
-                        </td> 
-                        <td>
-                            <label>&emsp;Student ID</label>
-                            <fieldset class="fieldset3"><input type="text" name="studentID" class="requiredField1" /></fieldset>
-                        </td>
-                        <td>
                             <label>&emsp;&emsp;&emsp;Term</label>
                             <fieldset class="fieldset4">&emsp;&emsp;&emsp;&nbsp;<select name="term">
                                                             <option value="Spring">Spring</option>
@@ -99,30 +71,12 @@ $studentID = $_POST['studentID'];
                         </td>                        
                     </tr>
                 </table>  
-                <fieldset>&emsp;<input name="Notes" id="submit" value="Notes" class="button big round deep-red" type="submit"/>
-                    <?php
-                    if($err == 1 ){
-                    echo '<script>';
-                    echo 'alert("Please input a Student Name");';
-                    echo 'location.href="NewStudent.php"';
-                    echo '</script>';
-                    }elseif($err == 2 ){
-                    echo '<script>';
-                    echo 'alert("Please input a Student ID");';
-                    echo 'location.href="NewStudent.php"';
-                    echo '</script>'; 
-                    }elseif($err == 3 ){
-                    echo '<script>';
-                    echo 'alert("Please input another Student ID, There is a Student exist with the current ID");';
-                    echo 'location.href="NewStudent.php"';
-                    echo '</script>'; 
-                    } else {
-                        $err == 0;
-                    }
-                    ?>
+                <fieldset>&emsp;<input name="Show" id="submit" value="Show" class="button big round deep-red" type="submit"/>
                 </fieldset>
             </form>  
         </div>
         </div>   
     </body>
 </html>
+
+

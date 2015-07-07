@@ -15,16 +15,20 @@ if(isset($_POST["iebugaround"])){
     $errors1[] = "Please input a Student ID";
     $err1 = 1;
     } 
-    if(!$errors1){
-    $_SESSION['studentID'] = $_POST['studentID'];
-    $_SESSION['term'] = $_POST['term'];
-    $_SESSION['year'] = $_POST['year'];
-        // Create connection
+    // Check if Id is already in
     mysql_connect($host, $username, $password) or
         die("Could not connect: " . mysql_error());
     mysql_select_db($db_name);
     $result1 = mysql_query("SELECT sn FROM tt1 where sid = $studentID");
     $row1 = mysql_fetch_row($result1);
+    if (mysql_num_rows($result1)== 0) {
+        $errors1[] = "Please input a Student ID, There is no Student exist with the current ID";
+        $err1 = 2;
+    }
+    if(!$errors1){
+    $_SESSION['studentID'] = $_POST['studentID'];
+    $_SESSION['term'] = $_POST['term'];
+    $_SESSION['year'] = $_POST['year'];
     $_SESSION['studentname'] = $row1[0]; 
     if ($_POST['Notes']) {
      header('Location: ExistingStudentNotes.php');
@@ -35,6 +39,7 @@ if(isset($_POST["iebugaround"])){
 
 <html>
     <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
         <link rel="stylesheet" type="text/css" href="Styles/StyleSheet.css" />
         <link rel="stylesheet" type="text/css" href="Styles/print.css" /> 
@@ -50,7 +55,7 @@ if(isset($_POST["iebugaround"])){
                         <li class="hide-from-printer"><a href="ExistingStudent.php" class="hide-from-printer">Existing Student</a></li>
                     </ul>
                 </li>
-                <li class="hide-from-printer"><a href="#">Statistics</a>
+                <li class="hide-from-printer"><a href="Statistics.php">Statistics</a>
                 </li>
                 <li class="hide-from-printer"><a href="logout.php">Sign Out</a>
                 </li>
@@ -91,7 +96,12 @@ if(isset($_POST["iebugaround"])){
                     echo 'alert("Please input a Student ID");';
                     echo 'location.href="ExistingStudent.php"';
                     echo '</script>'; 
-                    } else {
+                    } elseif($err1 == 2 ){
+                    echo '<script>';
+                    echo 'alert("Please input a Student ID, There is no Student exist with current ID");';
+                    echo 'location.href="ExistingStudent.php"';
+                    echo '</script>'; 
+                    }else {
                         $err1 == 0;
                     }
                     ?>
