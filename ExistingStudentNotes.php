@@ -134,6 +134,18 @@ if(isset($_POST["iebugaround"])){
             mysql_connect($host, $username, $password) or
                 die("Could not connect: " . mysql_error());
             mysql_select_db($db_name);
+            $result = mysql_query("SELECT name,courses FROM tt3 where id = $studentID");
+            if (mysql_num_rows($result) > 0) { 
+                echo "<h3><font color=#999>&emsp;Finished Courses</font></h3>";
+                echo "<table class=requiredField3 border = 1>"; 
+                while($row = mysql_fetch_array($result)) { 
+                    $cor = str_replace(' ', '<br>', $row['courses']);
+                    echo "<tr>"; 
+                    echo "<td class = table_d1 width = 250 style = padding-left:10px>".nl2br($cor)."<br>"."</td>"; 
+                    echo "</tr>"; 
+                } 
+                echo "</table>"; 
+            } 
             $result = mysql_query("SELECT date,ca,term,year,n FROM tt1 where sid = $studentID");
             if (mysql_num_rows($result) > 0) { 
                 echo "<h3><font color=#999>&emsp;Previous Notes</font></h3>";
