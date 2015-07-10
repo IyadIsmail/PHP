@@ -42,10 +42,10 @@ if (($handle = fopen("Student Course List.csv", "r")) !== FALSE) {
                 $sql = "SELECT sid FROM test1 where sid ='$id'";
                 $result = $conn->query($sql);
                 if ($result->num_rows > 0) { 
-                    $sql = "INSERT INTO test2 (sid,course)VALUES ($id,'$course')";  
+                    $sql = "INSERT INTO test2 VALUES ($id,'$fname','$lname','$course','spring','2015')";  
                 }else{
                     $sql = "INSERT INTO test1 VALUES ($id,'$lname','$fname')";
-                    $sql1 = "INSERT INTO test2 (sid,course)VALUES ($id,'$course')";
+                    $sql1 = "INSERT INTO test2 VALUES ($id,'$fname','$lname','$course','spring','2015')";
                 }
                 if ($conn->query($sql) === TRUE) {
                     //echo "New record created successfully";

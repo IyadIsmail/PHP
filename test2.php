@@ -11,9 +11,10 @@ if (($handle = fopen("Student Course List.csv", "r")) !== FALSE) {
         $row++;
         for ($c=0; $c < $num; $c++) {
             $result = '';
+            $data[4] = str_replace(' ','-',$data[4]);
             $data[$c] = str_replace(' ','',$data[$c]);
             $data[1] = substr($data[1], 0, 8);
-            if ($data[3] != '' & substr($data[1], 0, 2) == 'CS'){
+            if ($data[3] != '' & substr($data[1], 0, 2) == 'CS' & substr($data[7],0,4) == 'GRAD'){
                 $result = $result.' '.$data[3].$data[1].$data[4]."<br>";
             }  
         }
@@ -21,9 +22,18 @@ if (($handle = fopen("Student Course List.csv", "r")) !== FALSE) {
     $id = substr($result, 0, 5);
     $course = substr($result, 5, 5);
     $name = substr($result, 10);
+    $findme = '-';
+    $pos = strpos($name, $findme);
+    $lname = substr($name,0,$pos);
+    $fname = substr($name,$pos+1);
+    $pos1 = strpos($fname, $findme);
+    if ($pos1 != null){
+        $fname = substr($fname,0,$pos1);
+    }
     echo $id ."<br>";
     echo $course ."<br>";
-    echo $name ."<br>";
+    echo $lname ."<br>";
+    echo $fname ."<br>";
     }
     fclose($handle);
 }
