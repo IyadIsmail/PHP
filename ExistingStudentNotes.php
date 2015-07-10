@@ -17,6 +17,26 @@ if ($year == 'y'){
 }
 $cy = date('Y');
 $courses = '';
+$pointer1 = 0;
+//Used to highlight course
+$Courses_Finished = array(); 
+//To get Finished courses
+// Create connection
+mysql_connect($host, $username, $password) or
+    die("Could not connect: " . mysql_error());
+mysql_select_db($db_name);
+$result = mysql_query("SELECT test2.course FROM test1,test2 where test1.sid = $studentID AND test1.sid = test2.sid");
+if (mysql_num_rows($result) > 0) { 
+    $cor = '';
+    while($row = mysql_fetch_array($result)) { 
+        $cor = $cor.$row['course'].'-';
+        //Used to highlight course
+        $Courses_Finished[$row['course']] = 1;
+    }
+    $cor = substr($cor, 0, -1);
+    $pointer1 = 1;
+} 
+
 if(isset($_POST["iebugaround"])){
     $course = $_POST['course'];
     $_SESSION['course']= $_POST['course'];
@@ -134,18 +154,12 @@ if(isset($_POST["iebugaround"])){
             mysql_connect($host, $username, $password) or
                 die("Could not connect: " . mysql_error());
             mysql_select_db($db_name);
-            $result = mysql_query("SELECT test2.course FROM test1,test2 where test1.sid = $studentID AND test1.sid = test2.sid");
-            if (mysql_num_rows($result) > 0) { 
+            if ($pointer1 ==1) { 
                 echo "<h3><font color=#999>&emsp;Finished Courses</font></h3>";
                 echo "<table class=requiredField3 border = 1>";
-                $cor = '';
-                while($row = mysql_fetch_array($result)) { 
-                    $cor = $cor.$row['course'].'-';
-                }
-                $cor = substr($cor, 0, -1);
-                    echo "<tr>"; 
-                    echo "<td class = table_d1 width = 250 style = padding-left:10px>".$cor."</td>"; 
-                    echo "</tr>"; 
+                echo "<tr>"; 
+                echo "<td class = table_d1 width = 250 style = padding-left:10px>".$cor."</td>"; 
+                echo "</tr>"; 
                 echo "</table>"; 
             } 
             $result = mysql_query("SELECT date,ca,term,year,n FROM tt1 where sid = $studentID");
@@ -177,77 +191,275 @@ if(isset($_POST["iebugaround"])){
                 <table class="requiredField1" border="1">
                     <tr> 
                         <td class="table_d">&emsp;&nbsp;Deficiencies&emsp;&emsp;</td> 
-                        <td class="table_d1">CS214&emsp;&emsp;&emsp;&emsp;&nbsp;<input type="checkbox" name="course[]" value="CS214"></td>
-                        <td class="table_d1">CS250&emsp;&emsp;&emsp;&emsp;&nbsp;<input type="checkbox" name="course[]" value="CS250"></td>
-                        <td class="table_d1">CS310&emsp;&emsp;&emsp;&emsp;&nbsp;<input type="checkbox" name="course[]" value="CS350"></td>
-                        <td class="table_d1">CS351&emsp;&emsp;&emsp;&emsp;&nbsp;<input type="checkbox" name="course[]" value="CS351"></td>
-                        <td class="table_d1">CS355&emsp;&emsp;&emsp;&emsp;&nbsp;<input type="checkbox" name="course[]" value="CS355"></td>
+                        <?php if(!isset($Courses_Finished['CS214'])){
+                            echo "<td class=table_d1>CS214&emsp;&emsp;&emsp;&emsp;&nbsp;";
+                            echo "<input type=checkbox name=course[] value=CS214></td>";
+                            }else{
+                            echo "<td class=table_d5>CS214&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;</td>";                                    
+                            }
+                        ?>
+                        <?php if(!isset($Courses_Finished['CS250'])){
+                            echo "<td class=table_d1>CS250&emsp;&emsp;&emsp;&emsp;&nbsp;";
+                            echo "<input type=checkbox name=course[] value=CS250></td>";
+                            }else{
+                            echo "<td class=table_d5>CS250&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;</td>";                                    
+                            }
+                        ?>
+                        <?php if(!isset($Courses_Finished['CS310'])){
+                            echo "<td class=table_d1>CS310&emsp;&emsp;&emsp;&emsp;&nbsp;";
+                            echo "<input type=checkbox name=course[] value=CS310></td>";
+                            }else{
+                            echo "<td class=table_d5>CS310&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;</td>";                                    
+                            }
+                        ?>                        
+                        <?php if(!isset($Courses_Finished['CS351'])){
+                            echo "<td class=table_d1>CS351&emsp;&emsp;&emsp;&emsp;&nbsp;";
+                            echo "<input type=checkbox name=course[] value=CS351></td>";
+                            }else{
+                            echo "<td class=table_d5>CS351&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;</td>";                                    
+                            }
+                        ?>
+                        <?php if(!isset($Courses_Finished['CS355'])){
+                            echo "<td class=table_d1>CS355&emsp;&emsp;&emsp;&emsp;&nbsp;";
+                            echo "<input type=checkbox name=course[] value=CS355></td>";
+                            }else{
+                            echo "<td class=table_d5>CS355&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;</td>";                                    
+                            }
+                        ?>
                     </tr>
                 </table>
                 <br>
                 <table class="requiredField1" border="1">
                     <tr> 
                         <td class="table_d">&emsp;&nbsp;Core- Programming&emsp;</td> 
-                        <td class="table_d1">CS500&emsp;&emsp;&emsp;&emsp;&nbsp;IP<input type="checkbox" name="course[]" value="CS500"></td>
+                        <?php if(!isset($Courses_Finished['CS500'])){
+                            echo "<td class=table_d1>CS500&emsp;&emsp;&emsp;&emsp;&nbsp;IP";
+                            echo "<input type=checkbox name=course[] value=CS500></td>";
+                            }else{
+                            echo "<td class=table_d5>CS500&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;IP</td>";                                    
+                            }
+                        ?>
                     </tr>
                 </table>
                 <br>
                 <table class="requiredField1" border="1">
                     <tr> 
-                        <td class="table_d">&emsp;&emsp;Core - OS&emsp;</td> 
-                        <td class="table_d1">CS410G&emsp;&emsp;OS<input type="checkbox" name="course[]" value="CS410"></td>
-                        <td class="table_d1">CS512&emsp;&emsp;AOS<input type="checkbox" name="course[]" value="CS512"></td>
-                        <td class="table_d1">CS513&emsp;&emsp;&nbsp;TOS<input type="checkbox" name="course[]" value="CS513"></td>
+                        <td class="table_d">&emsp;&emsp;Core - OS&emsp;</td>
+                        <?php if(!isset($Courses_Finished['CS410'])){
+                            echo "<td class=table_d1>CS410G&emsp;&emsp;OS";
+                            echo "<input type=checkbox name=course[] value=CS410></td>";
+                            }else{
+                            echo "<td class=table_d5>CS410G&emsp;&emsp;OS</td>";                                    
+                            }
+                        ?>
+                        <?php if(!isset($Courses_Finished['CS512'])){
+                            echo "<td class=table_d1>CS512&emsp;&emsp;AOS";
+                            echo "<input type=checkbox name=course[] value=CS512></td>";
+                            }else{
+                            echo "<td class=table_d5>CS512&emsp;&emsp;AOS</td>";                                    
+                            }
+                        ?>
+                        <?php if(!isset($Courses_Finished['CS513'])){
+                            echo "<td class=table_d1>CS513&emsp;&emsp;&nbsp;TOS";
+                            echo "<input type=checkbox name=course[] value=CS513></td>";
+                            }else{
+                            echo "<td class=table_d5>CS513&emsp;&emsp;&nbsp;TOS</td>";                                    
+                            }
+                        ?>
                     </tr>
                     <tr> 
                         <td class="table_d">&nbsp;&nbsp;&nbsp;Core - Networks&emsp;</td> 
-                        <td class="table_d1">CS420G&emsp;&nbsp;&nbsp;&nbsp;CN<input type="checkbox" name="course[]" value="CS420"></td>
-                        <td class="table_d1">CS556&emsp;&nbsp;&nbsp;&nbsp;ACN<input type="checkbox" name="course[]" value="CS556"></td>
-                        <td class="table_d1">CS557&emsp;&emsp;TCN<input type="checkbox" name="course[]" value="CS557"></td>
+                        <?php if(!isset($Courses_Finished['CS420'])){
+                            echo "<td class=table_d1>CS420G&emsp;&nbsp;&nbsp;&nbsp;CN";
+                            echo "<input type=checkbox name=course[] value=CS420></td>";
+                            }else{
+                            echo "<td class=table_d5>CS420G&emsp;&nbsp;&nbsp;&nbsp;CN</td>";                                    
+                            }
+                        ?>
+                        <?php if(!isset($Courses_Finished['CS556'])){
+                            echo "<td class=table_d1>CS556&emsp;&nbsp;&nbsp;&nbsp;ACN";
+                            echo "<input type=checkbox name=course[] value=CS556></td>";
+                            }else{
+                            echo "<td class=table_d5>CS556&emsp;&nbsp;&nbsp;&nbsp;ACN</td>";                                    
+                            }
+                        ?>
+                        <?php if(!isset($Courses_Finished['CS557'])){
+                            echo "<td class=table_d1>CS557&emsp;&emsp;TCN";
+                            echo "<input type=checkbox name=course[] value=CS557></td>";
+                            }else{
+                            echo "<td class=table_d5>CS557&emsp;&emsp;TCN</td>";                                    
+                            }
+                        ?>
                     </tr>                    
                     <tr> 
                         <td class="table_d">&emsp;&emsp;Core - AI&emsp;</td> 
-                        <td class="table_d1">CS460G&emsp;&nbsp;&nbsp;&nbsp;&nbsp;AI<input type="checkbox" name="course[]" value="CS460"></td>
-                        <td class="table_d1">CS548&emsp;&nbsp;&nbsp;&nbsp;&nbsp;AAI<input type="checkbox" name="course[]" value="CS548"></td>
-                        <td class="table_d1">CS549&emsp;&emsp;&nbsp;TAI<input type="checkbox" name="course[]" value="CS549"></td>
+                        <?php if(!isset($Courses_Finished['CS460'])){
+                            echo "<td class=table_d1>CS460G&emsp;&nbsp;&nbsp;&nbsp;&nbsp;AI";
+                            echo "<input type=checkbox name=course[] value=CS460></td>";
+                            }else{
+                            echo "<td class=table_d5>CS460G&emsp;&nbsp;&nbsp;&nbsp;&nbsp;AI</td>";                                    
+                            }
+                        ?>
+                        <?php if(!isset($Courses_Finished['CS548'])){
+                            echo "<td class=table_d1>CS548&emsp;&nbsp;&nbsp;&nbsp;&nbsp;AAI";
+                            echo "<input type=checkbox name=course[] value=CS548></td>";
+                            }else{
+                            echo "<td class=table_d5>CS548&emsp;&nbsp;&nbsp;&nbsp;&nbsp;AAI</td>";                                    
+                            }
+                        ?>
+                        <?php if(!isset($Courses_Finished['CS549'])){
+                            echo "<td class=table_d1>CS549&emsp;&emsp;&nbsp;TAI";
+                            echo "<input type=checkbox name=course[] value=CS549></td>";
+                            }else{
+                            echo "<td class=table_d5>CS549&emsp;&emsp;&nbsp;TAI</td>";                                    
+                            }
+                        ?>                    
                     </tr> 
                     <tr> 
                         <td class="table_d">&nbsp;&nbsp;&nbsp;&nbsp;Core - Graphics&nbsp;</td> 
-                        <td class="table_d1">CS465G&emsp;&nbsp;&nbsp;&nbsp;CG<input type="checkbox" name="course[]" value="CS465"></td>
-                        <td class="table_d1">CS566&emsp;&nbsp;&nbsp;&nbsp;ACG<input type="checkbox" name="course[]" value="CS566"></td>
-                        <td class="table_d1">CS567&emsp;&emsp;TCG<input type="checkbox" name="course[]" value="CS567"></td>
+                        <?php if(!isset($Courses_Finished['CS465'])){
+                            echo "<td class=table_d1>CS465G&emsp;&nbsp;&nbsp;&nbsp;CG";
+                            echo "<input type=checkbox name=course[] value=CS465></td>";
+                            }else{
+                            echo "<td class=table_d5>CS465G&emsp;&nbsp;&nbsp;&nbsp;CG</td>";                                    
+                            }
+                        ?>
+                        <?php if(!isset($Courses_Finished['CS566'])){
+                            echo "<td class=table_d1>CS566&emsp;&nbsp;&nbsp;&nbsp;ACG";
+                            echo "<input type=checkbox name=course[] value=CS566></td>";
+                            }else{
+                            echo "<td class=table_d5>CS566&emsp;&nbsp;&nbsp;&nbsp;ACG</td>";                                    
+                            }
+                        ?>
+                        <?php if(!isset($Courses_Finished['CS567'])){
+                            echo "<td class=table_d1>CS567&emsp;&emsp;TCG";
+                            echo "<input type=checkbox name=course[] value=CS567></td>";
+                            }else{
+                            echo "<td class=table_d5>CS567&emsp;&emsp;TCG</td>";                                    
+                            }
+                        ?>                     
                     </tr>
                     <tr> 
                         <td class="table_d">&emsp;&emsp;Core - DB&emsp;</td> 
-                        <td class="table_d1">CS470G&emsp;&nbsp;&nbsp;&nbsp;DB<input type="checkbox" name="course[]" value="CS470"></td>
-                        <td class="table_d1">CS522&emsp;&nbsp;&nbsp;&nbsp;ADB<input type="checkbox" name="course[]" value="CS522"></td>
-                        <td class="table_d1">CS523&emsp;&emsp;TDB<input type="checkbox" name="course[]" value="CS523"></td>
+                        <?php if(!isset($Courses_Finished['CS470'])){
+                            echo "<td class=table_d1>CS470G&emsp;&nbsp;&nbsp;&nbsp;DB";
+                            echo "<input type=checkbox name=course[] value=CS470></td>";
+                            }else{
+                            echo "<td class=table_d5>CS470G&emsp;&nbsp;&nbsp;&nbsp;DB</td>";                                    
+                            }
+                        ?>
+                        <?php if(!isset($Courses_Finished['CS522'])){
+                            echo "<td class=table_d1>CS522&emsp;&nbsp;&nbsp;&nbsp;ADB";
+                            echo "<input type=checkbox name=course[] value=CS522></td>";
+                            }else{
+                            echo "<td class=table_d5>CS522&emsp;&nbsp;&nbsp;&nbsp;ADB</td>";                                    
+                            }
+                        ?>
+                        <?php if(!isset($Courses_Finished['CS523'])){
+                            echo "<td class=table_d1>CS523&emsp;&emsp;TDB";
+                            echo "<input type=checkbox name=course[] value=CS523></td>";
+                            }else{
+                            echo "<td class=table_d5>CS523&emsp;&emsp;TDB</td>";                                    
+                            }
+                        ?>                     
                     </tr>
                         <td class="table_d">&emsp;&nbsp;&nbsp;Core - Arch&emsp;</td> 
-                        <td class="table_d1">CS560&emsp;&emsp;&nbsp;&nbsp;CA<input type="checkbox" name="course[]" value="CS560"></td>
-                        <td class="table_d1">CS561&emsp;&emsp;ACA<input type="checkbox" name="course[]" value="CS561"></td>
-                        <td class="table_d1">CS562&emsp;&emsp;TCA<input type="checkbox" name="course[]" value="CS562"></td>
+                        <?php if(!isset($Courses_Finished['CS560'])){
+                            echo "<td class=table_d1>CS560&emsp;&emsp;&nbsp;&nbsp;CA";
+                            echo "<input type=checkbox name=course[] value=CS560></td>";
+                            }else{
+                            echo "<td class=table_d5>CS560&emsp;&emsp;&nbsp;&nbsp;CA</td>";                                    
+                            }
+                        ?>
+                        <?php if(!isset($Courses_Finished['CS561'])){
+                            echo "<td class=table_d1>CS561&emsp;&emsp;ACA";
+                            echo "<input type=checkbox name=course[] value=CS561></td>";
+                            }else{
+                            echo "<td class=table_d5>CS561&emsp;&emsp;ACA</td>";                                    
+                            }
+                        ?>
+                        <?php if(!isset($Courses_Finished['CS562'])){
+                            echo "<td class=table_d1>CS562&emsp;&emsp;TCA";
+                            echo "<input type=checkbox name=course[] value=CS562></td>";
+                            }else{
+                            echo "<td class=table_d5>CS562&emsp;&emsp;TCA</td>";                                    
+                            }
+                        ?>                    
                     </tr>  
                 </table>
                 <br>
                 <table class="requiredField1" border="1">
                     <tr> 
                         <td class="table_d">&emsp;&emsp;&nbsp;&nbsp;Electives&emsp;&emsp;&nbsp;&nbsp;</td> 
-                        <td class="table_d1">CS412G&emsp;&emsp;&emsp;&nbsp;<input type="checkbox" name="course[]" value="CS412"></td>
-                        <td class="table_d1">CS540&emsp;&emsp;&emsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="course[]" value="CS540"></td>
-                        <td class="table_d1">CS575&emsp;&emsp;&emsp;&nbsp;IS<input type="checkbox" name="course[]" value="CS575"></td>
-                        <td class="table_d1">CS585&emsp;&emsp;&nbsp;TSE<input type="checkbox" name="course[]" value="CS585"></td>
-                        <td class="table_d1">CS590&emsp;&emsp;&emsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="course[]" value="CS590"></td>
+                        <?php if(!isset($Courses_Finished['CS412'])){
+                            echo "<td class=table_d1>CS412G&emsp;&emsp;&emsp;&nbsp;";
+                            echo "<input type=checkbox name=course[] value=CS412></td>";
+                            }else{
+                            echo "<td class=table_d5>CS412G&emsp;&emsp;&emsp;&emsp;&nbsp;</td>";                                    
+                            }
+                        ?>
+                        <?php if(!isset($Courses_Finished['CS540'])){
+                            echo "<td class=table_d1>CS540&emsp;&emsp;&emsp;&nbsp;&nbsp;&nbsp;";
+                            echo "<input type=checkbox name=course[] value=CS540></td>";
+                            }else{
+                            echo "<td class=table_d5>CS540&emsp;&emsp;&emsp;&emsp;&nbsp;&nbsp;&nbsp;</td>";                                    
+                            }
+                        ?>
+                        <?php if(!isset($Courses_Finished['CS575'])){
+                            echo "<td class=table_d1>CS575&emsp;&emsp;&emsp;&nbsp;IS";
+                            echo "<input type=checkbox name=course[] value=CS575></td>";
+                            }else{
+                            echo "<td class=table_d5>CS575&emsp;&emsp;&emsp;&emsp;&nbsp;IS</td>";                                    
+                            }
+                        ?> 
+                        <?php if(!isset($Courses_Finished['CS585'])){
+                            echo "<td class=table_d1>CS585&emsp;&emsp;&nbsp;TSE";
+                            echo "<input type=checkbox name=course[] value=CS585></td>";
+                            }else{
+                            echo "<td class=table_d5>CS585&emsp;&emsp;&emsp;&nbsp;TSE</td>";                                    
+                            }
+                        ?>
+                        <?php if(!isset($Courses_Finished['CS590'])){
+                            echo "<td class=table_d1>CS590&emsp;&emsp;&emsp;&nbsp;&nbsp;&nbsp;";
+                            echo "<input type=checkbox name=course[] value=CS590></td>";
+                            }else{
+                            echo "<td class=table_d5>CS590&emsp;&emsp;&emsp;&emsp;&nbsp;&nbsp;&nbsp;</td>";                                    
+                            }
+                        ?>                         
                     </tr>
                 </table>
                 <br>
                 <table class="requiredField1" border="1">
                     <tr> 
                         <td class="table_d">&emsp;&nbsp;&nbsp;&nbsp;Exit Options&emsp;&nbsp;&nbsp;</td> 
-                        <td class="table_d1">CS600&emsp;&emsp;&emsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="course[]" value="CS600"></td>
-                        <td class="table_d1">CS601&emsp;&emsp;&emsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="course[]" value="CS601"></td>
-                        <td class="table_d1">CS595&emsp;&emsp;&emsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="course[]" value="CS595"></td>
-                        <td class="table_d1">CS599&emsp;&emsp;&emsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="course[]" value="CS599"></td>
+                        <?php if(!isset($Courses_Finished['CS600'])){
+                            echo "<td class=table_d1>CS600&emsp;&emsp;&emsp;&nbsp;&nbsp;&nbsp;";
+                            echo "<input type=checkbox name=course[] value=CS600></td>";
+                            }else{
+                            echo "<td class=table_d5>CS600&emsp;&emsp;&emsp;&emsp;&nbsp;&nbsp;&nbsp;</td>";                                    
+                            }
+                        ?>
+                        <?php if(!isset($Courses_Finished['CS601'])){
+                            echo "<td class=table_d1>CS601&emsp;&emsp;&emsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+                            echo "<input type=checkbox name=course[] value=CS601></td>";
+                            }else{
+                            echo "<td class=table_d5>CS601&emsp;&emsp;&emsp;&emsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>";                                    
+                            }
+                        ?>
+                        <?php if(!isset($Courses_Finished['CS595'])){
+                            echo "<td class=table_d1>CS595&emsp;&emsp;&emsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+                            echo "<input type=checkbox name=course[] value=CS595></td>";
+                            }else{
+                            echo "<td class=table_d5>CS595&emsp;&emsp;&emsp;&emsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>";                                    
+                            }
+                        ?> 
+                        <?php if(!isset($Courses_Finished['CS599'])){
+                            echo "<td class=table_d1>CS599&emsp;&emsp;&emsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+                            echo "<input type=checkbox name=course[] value=CS599></td>";
+                            }else{
+                            echo "<td class=table_d5>CS599&emsp;&emsp;&emsp;&emsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>";                                    
+                            }
+                        ?>                          
                     </tr>
                 </table> 
                 <h3><font color="#999">&emsp;Other Notes</font></h3>
