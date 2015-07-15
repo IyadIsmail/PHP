@@ -3,13 +3,15 @@ session_start();
 require_once 'cookies.php';
 require_once 'config.php';
 
-$studentname = $_SESSION['studentname'];
-$studentID = $_SESSION['studentID'];
-$term = $_SESSION['term'];
-$year = $_SESSION['year'];
-$area1 = $_SESSION['textarea'];
+$Firstname = $_SESSION['Firstname'];
+$Lastname = $_SESSION['Lastname'];
+$Studentname = $Firstname." ".$Lastname;
+$StudentID = $_SESSION['StudentID'];
+$Term = $_SESSION['Term'];
+$Year = $_SESSION['Year'];
+$Area1 = $_SESSION['textarea'];
 
-$str_arr = explode("\n", $area1);
+$str_arr = explode("\n", $Area1);
 $Num_Notes = count($str_arr);
 
 for($count=$Num_Notes; $count < 4; $count++)
@@ -19,9 +21,9 @@ $Text2 = $str_arr[1];
 $Text3 = $str_arr[2];
 $Text4 = $str_arr[3];
 
-if ($year == 'y'){
+if ($Year == 'y'){
     $y = date('Y');
-}elseif ($year == 'y1'){
+}elseif ($Year == 'y1'){
     $y1 = date('Y');
     $y = $y1+1;
 }else{
@@ -89,6 +91,10 @@ if(isset($_POST["iebugaround"])){
                     </ul>
                 </li>
                 <li class="hide-from-printer"><a href="Statistics.php">Statistics</a>
+                    <ul>
+                        <li class="hide-from-printer"><a href="GeneralStats.php" class="hide-from-printer">General Statistics</a></li>
+                        <li class="hide-from-printer"><a href="TermStats.php" class="hide-from-printer">Term Statistics</a></li>
+                    </ul> 
                 </li>
                 <li class="hide-from-printer"><a href="logout.php">Sign Out</a>
                 </li>
@@ -102,12 +108,12 @@ if(isset($_POST["iebugaround"])){
             <table>
                 <tr> 
                     <td class="table_d">
-                        <label class="requiredField1">Student Name: <?php echo $studentname;?></label>
-                        <input name="studentname" type="hidden" value="<?php echo $studentname;?>">
+                        <label class="requiredField1">Student Name: <?php echo $Studentname;?></label>
+                        <input name="Studentname" type="hidden" value="<?php echo $Studentname;?>">
                     </td>
                     <td class="table_d">
-                        <label class="requiredField1">&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;Student ID:  <?php echo $studentID;?></label>
-                        <input name="studentID" type="hidden" value="<?php echo $studentID;?>">    
+                        <label class="requiredField1">&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;Student ID:  <?php echo $StudentID;?></label>
+                        <input name="StudentID" type="hidden" value="<?php echo $StudentID;?>">    
                     </td>                    
                 </tr>
             </table>

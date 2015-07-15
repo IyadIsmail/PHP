@@ -4,21 +4,11 @@ require_once 'cookies.php';
 require_once 'config.php';
 
 if(isset($_POST["iebugaround"])){
-    $term = $_POST['term'];
-    $year = $_POST['year'];
-    $_SESSION['term'] = $_POST['term'];
-    $_SESSION['year'] = $_POST['year'];
-    if ($year == 'y'){
-        $y = date('Y');
-    }elseif ($year == 'y1'){
-        $y1 = date('Y');
-        $y = $y1+1;
+    if(isset($_POST['Stats'])){
+        $_SESSION['Stats'] = $_POST['Stats'];
+        header('Location: ShowStats1.php');
     }else{
-        $y1 = date('Y');
-        $y = $y1+2;
-    }
-    if ($_POST['Show']) {
-     header('Location: ShowStats.php');
+        header('Location: Statistics1.php');
     }
 }
 
@@ -57,32 +47,27 @@ if(isset($_POST["iebugaround"])){
         <div id="content_area">
             <form action="#" method="post">
                 <input name="iebugaround" type="hidden" value="1">
-                <table>
-                    <tr> 
-                        <td>
-                            <label>&emsp;&emsp;&emsp;Term</label>
-                            <fieldset class="fieldset4">&emsp;&emsp;&emsp;&nbsp;<select name="term">
-                                                            <option value="Spring">Spring</option>
-                                                            <option value="Summer">Summer</option>
-                                                            <option value="Fall">Fall</option>
-                                                        </select></fieldset>
-                        </td>
-                        <td>
-                            <label>&nbsp;Year</label>
-                            <fieldset class="fieldset3"><select name="year">
-                                                            <option value="y"><?php echo $y; ?></option> 
-                                                            <option value="y1"><?php echo $y1; ?></option>
-                                                            <option value="y2"><?php echo $y2; ?></option>       
-                                                        </select></fieldset>
-                        </td>                        
+                <table class=requiredField1>
+                    <tr>
+                        <td class = table_d1 width = 250>
+                            <input type= radio name=Stats value="1"> Courses Advised</td>
+                    </tr>
+                    <tr>
+                        <td class = table_d1 width = 250>
+                            <input type= radio name=Stats value="2"> Courses Taken</td>
+                    </tr>
+                    <tr>
+                        <td class = table_d1 width = 250>
+                            <input type= radio name=Stats value="3"> Courses Need for Grad Students</td> 
                     </tr>
                 </table>  
-                <fieldset>&emsp;<input name="Show" id="submit" value="Show" class="button big round deep-red" type="submit"/>
+                <fieldset>&emsp;<input name="Next" id="submit" value="Next" class="button big round deep-red" type="submit"/>
                 </fieldset>
             </form>  
         </div>
         </div>   
     </body>
 </html>
+
 
 

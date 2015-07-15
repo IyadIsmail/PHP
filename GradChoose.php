@@ -3,36 +3,31 @@ session_start();
 require_once 'cookies.php';
 require_once 'config.php';
 
+$LastName = $_SESSION['LastName'];
+$StudentID = $_SESSION['StudentID'];
+
 if(isset($_POST["iebugaround"])){
-    $term = $_POST['term'];
-    $year = $_POST['year'];
-    $_SESSION['term'] = $_POST['term'];
-    $_SESSION['year'] = $_POST['year'];
-    if ($year == 'y'){
-        $y = date('Y');
-    }elseif ($year == 'y1'){
-        $y1 = date('Y');
-        $y = $y1+1;
+    if (isset($_POST['FirstName'])) {
+        $_SESSION['FirstName'] = $_POST['FirstName'];
+        header('Location: FinishedCourses.php');
     }else{
-        $y1 = date('Y');
-        $y = $y1+2;
-    }
-    if ($_POST['Show']) {
-     header('Location: ShowStats.php');
+        header('Location: GradChoose.php');
     }
 }
 
+
 ?>
+
 <html>
     <head>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
         <link rel="stylesheet" type="text/css" href="Styles/StyleSheet.css" />
         <link rel="stylesheet" type="text/css" href="Styles/print.css" /> 
         <link href="Styles/style.css" rel="stylesheet" type="text/css" />
         <title>Advising Notes</title>
     </head>
-    <body>  
+    <body>
         <div id="centeredmenu">
             <ul>
                 <li class="hide-from-printer"><a href="main.php">Advising</a>
@@ -58,30 +53,28 @@ if(isset($_POST["iebugaround"])){
             <form action="#" method="post">
                 <input name="iebugaround" type="hidden" value="1">
                 <table>
-                    <tr> 
+                    <tr>
                         <td>
-                            <label>&emsp;&emsp;&emsp;Term</label>
-                            <fieldset class="fieldset4">&emsp;&emsp;&emsp;&nbsp;<select name="term">
-                                                            <option value="Spring">Spring</option>
-                                                            <option value="Summer">Summer</option>
-                                                            <option value="Fall">Fall</option>
-                                                        </select></fieldset>
+                            <label>&emsp;Please select which student:</label>
                         </td>
-                        <td>
-                            <label>&nbsp;Year</label>
-                            <fieldset class="fieldset3"><select name="year">
-                                                            <option value="y"><?php echo $y; ?></option> 
-                                                            <option value="y1"><?php echo $y1; ?></option>
-                                                            <option value="y2"><?php echo $y2; ?></option>       
-                                                        </select></fieldset>
-                        </td>                        
                     </tr>
-                </table>  
-                <fieldset>&emsp;<input name="Show" id="submit" value="Show" class="button big round deep-red" type="submit"/>
-                </fieldset>
+                </table>
+                <?php 
+                    mysql_connect($host, $username, $password) or
+                    die("Could not connect: " . mysql_error());
+                    mysql_select_db($db_name);
+                    $result = mysql_query("SELECT Fname FROM Grad_Students where SID = $StudentID and Lname = '$LastName'");
+                    echo "<table class=requiredField1>";
+                    while($row = mysql_fetch_array($result)) {
+                      echo "<tr>";
+                      echo "<td class = table_d1 width = 250><input type= radio name=FirstName value=$row[Fname]>".ucfirst(strtolower($row['Fname']))." ".ucfirst($LastName)."<br></td>";             
+                      echo "</tr>";     
+                    }  
+                ?>
+                </table> 
+                <fieldset>&emsp;<input name="Finished_Courses" id="submit" value="Finished_Courses" class="button big round deep-red" type="submit"/>
             </form>  
         </div>
-        </div>   
     </body>
 </html>
 

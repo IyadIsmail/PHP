@@ -5,7 +5,9 @@ $password=""; // Mysql password
 $db_name="wiu"; // Database name 
 
 $row = 1;
-if (($handle = fopen("Student Course List.csv", "r")) !== FALSE) {
+$filename = 'uploads/Student Course List.csv';
+if (file_exists($filename)) {
+    if (($handle = fopen("uploads/Student Course List.csv", "r")) !== FALSE) {
     while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
         $num = count($data);
         $row++;
@@ -18,7 +20,6 @@ if (($handle = fopen("Student Course List.csv", "r")) !== FALSE) {
                 $result = $result.' '.$data[3].$data[1].$data[4]."<br>";
             }  
         }
-    //echo $result;
     // Create connection
     $conn = new mysqli($host, $username, $password, $db_name);
     // Check connection
@@ -37,25 +38,40 @@ if (($handle = fopen("Student Course List.csv", "r")) !== FALSE) {
         $fname = substr($fname,0,$pos1);
     }
     $fname = str_replace('<br>', '', $fname);
-    //$out = str_replace('<br>', ' ', $course);
     if ($id != 0){
-                $sql = "SELECT sid FROM test1 where sid ='$id'";
+                $sql = "SELECT sid FROM test1 where sid ='$id' AND fname = '$fname' And lname ='$lname'";
                 $result = $conn->query($sql);
                 if ($result->num_rows > 0) { 
-                    $sql = "INSERT INTO test2 VALUES ($id,'$fname','$lname','$course','spring','2015')";  
+                    $sql = "SELECT sid FROM test2 where sid ='$id' AND fname = '$fname' And lname ='$lname' AND course='$course'";
+                    $result1 = $conn->query($sql);
+                    if ($result->num_rows == 0){
+                        $sql = "INSERT INTO test2 VALUES ($id,'$fname','$lname','$course','spring','2015')";  
+                        if ($conn->query($sql) === TRUE) {
+                            echo "New record created successfully";
+                        } else {
+                            echo "Error: " . $sql . "<br>" . $conn->error;
+                        } 
+                    }
                 }else{
-                    $sql = "INSERT INTO test1 VALUES ($id,'$lname','$fname')";
-                    $sql1 = "INSERT INTO test2 VALUES ($id,'$fname','$lname','$course','spring','2015')";
+                    $sql = "INSERT INTO test1 VALUES ($id,'$fname','$lname')";
+                    if ($conn->query($sql) === TRUE) {
+                        echo "New record created successfully";
+                    } else {
+                        echo "Error: " . $sql . "<br>" . $conn->error;
+                    }                    
+                    $sql = "INSERT INTO test2 VALUES ($id,'$fname','$lname','$course','spring','2015')";
+                    if ($conn->query($sql) === TRUE) {
+                        echo "New record created successfully";
+                    } else {
+                        echo "Error: " . $sql . "<br>" . $conn->error;
+                    }                    
                 }
-                if ($conn->query($sql) === TRUE) {
-                    //echo "New record created successfully";
-                } 
-                if ($conn->query($sql1) === TRUE) {
-                    //echo "New record created successfully";
-                } 
         }
     }
         $conn->close();
     fclose($handle);
+    }
+} else {
+    echo "The file $filename does not exist";
 }
 ?>

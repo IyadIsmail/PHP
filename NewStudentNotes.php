@@ -3,20 +3,22 @@ session_start();
 require_once 'cookies.php';
 require_once 'config.php';
 
-$studentname = $_SESSION['studentname'];
-$studentID = $_SESSION['studentID'];
-$term = $_SESSION['term'];
-$year = $_SESSION['year'];
-if ($year == 'y'){
+$Firstname = $_SESSION['Firstname'];
+$Lastname = $_SESSION['Lastname'];
+$Studentname = $Firstname." ".$Lastname;
+$StudentID = $_SESSION['StudentID'];
+$Term = $_SESSION['Term'];
+$Year = $_SESSION['Year'];
+if ($Year == 'y'){
     $y = date('Y');
-}elseif ($year == 'y1'){
+}elseif ($Year == 'y1'){
     $y1 = date('Y');
     $y = $y1+1;
 }else{
     $y1 = date('Y');
     $y = $y1+2;
 }
-$cy = date('Y');
+$Current_Year = date('Y');
 $courses = '';
 
 if(isset($_POST["iebugaround"])){
@@ -51,7 +53,13 @@ if(isset($_POST["iebugaround"])){
         if ($conn->connect_error) {
             die("Connection failed: " . $conn->connect_error);
         } 
-        $sql = "INSERT INTO tt1 VALUES ($studentID,'$studentname', CURDATE(),'$term','$y','$courses','$out')";
+        $sql = "INSERT INTO Advised_Students VALUES ($StudentID,'$Firstname','$Lastname')";
+        if ($conn->query($sql) === TRUE) {
+            echo "New record created successfully";
+        } else {
+            echo "Error: " . $sql . "<br>" . $conn->error;
+        }
+        $sql = "INSERT INTO Advised_Notes VALUES ($StudentID,'$Firstname','$Lastname', CURDATE(),'$Term','$y','$courses','$out')";
         if ($conn->query($sql) === TRUE) {
             echo "New record created successfully";
         } else {
@@ -59,12 +67,12 @@ if(isset($_POST["iebugaround"])){
         }
         if($Num_courses > 0){   
             for($count = 0; $count < $Num_courses; $count++){
-                $sql = "SELECT CN FROM tt2 where CN ='$course[$count]' AND term = '$term' AND year = '$y'";
+                $sql = "SELECT Course_Name FROM Advised_Courses where Course_Name ='$course[$count]' AND Term = '$Term' AND Year = '$y'";
                 $result = $conn->query($sql);
                 if ($result->num_rows > 0) { 
-                    $sql = "UPDATE tt2 SET Num = Num+1 WHERE CN = '$course[$count]' AND term = '$term' AND year = '$y'";  
+                    $sql = "UPDATE Advised_Courses SET Count_Courses = Count_Courses+1 WHERE Course_Name = '$course[$count]' AND Term = '$Term' AND Year = '$y'";  
             }else{
-                    $sql = "INSERT INTO tt2 VALUES ('$course[$count]',1,'$term','$y')";
+                    $sql = "INSERT INTO Advised_Courses VALUES ('$course[$count]','$Term','$y',1)";
             }
             
         if ($conn->query($sql) === TRUE) {
@@ -99,7 +107,13 @@ if(isset($_POST["iebugaround"])){
                     </ul>
                 </li>
                 <li class="hide-from-printer"><a href="Statistics.php">Statistics</a>
+                    <ul>
+                        <li class="hide-from-printer"><a href="GeneralStats.php" class="hide-from-printer">General Statistics</a></li>
+                        <li class="hide-from-printer"><a href="TermStats.php" class="hide-from-printer">Term Statistics</a></li>
+                    </ul>                     
                 </li>
+                <li class="hide-from-printer"><a href="Upload.php">Upload</a>               
+                </li>                
                 <li class="hide-from-printer"><a href="logout.php">Sign Out</a>
                 </li>
             </ul>
@@ -111,18 +125,18 @@ if(isset($_POST["iebugaround"])){
                 <table>
                     <tr> 
                         <td class="table_d">
-                            <label class="requiredField1">Student Name: <?php echo $studentname;?></label>
-                            <input name="studentname" type="hidden" value="<?php echo $studentname;?>">
-                        </td>
+                            <label class="requiredField1">Student Name: <?php echo $Studentname;?></label>
+                            <input name="studentname" type="hidden" value="<?php echo $Studentname;?>">
+                        </td>                      
                         <td class="table_d">
-                            <label class="requiredField1">&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;Student ID:  <?php echo $studentID;?></label>
-                            <input name="studentID" type="hidden" value="<?php echo $studentID;?>">    
+                            <label class="requiredField1">&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;Student ID:  <?php echo $StudentID;?></label>
+                            <input name="studentID" type="hidden" value="<?php echo $StudentID;?>">    
                         </td>
                     </tr>
                     <tr> 
                         <td class="table_d">
-                            <label class="requiredField1">&emsp;Term:  <?php echo $term;?></label>
-                            <input name="term" type="hidden" value="<?php echo $term;?>">    
+                            <label class="requiredField1">&emsp;Term:  <?php echo $Term;?></label>
+                            <input name="term" type="hidden" value="<?php echo $Term;?>">    
                         </td> 
                        <td class="table_d">
                             <label class="requiredField1">&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;Year:  <?php echo $y;?></label>

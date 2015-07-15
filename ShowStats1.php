@@ -97,7 +97,7 @@ if(isset($_POST["iebugaround"])){
                         echo "</table>"; 
                     }     
                 }else{
-                   $result = mysql_query("SELECT Course_Name,Count(SID) FROM Grad_Courses where Term = '$Term' AND Year = '$y' GROUP BY Course_Name ORDER By Course_Name");
+                   $result = mysql_query("SELECT Course,Count(SID) FROM Grad_Courses where Term = '$Term' AND Year = '$y' GROUP BY COURSE ORDER By Course");
                     if (mysql_num_rows($result) > 0) { 
                         echo "<h3><font color=#999>&emsp;Courses Taken</font></h3>";
                         echo "<table class=requiredField4 border = 1>"; 
@@ -107,7 +107,7 @@ if(isset($_POST["iebugaround"])){
                         echo "</tr>"; 
                         while($row = mysql_fetch_array($result)) { 
                             echo "<tr>"; 
-                            echo "<td class = table_d1 width = 100><center>".$row['Course_Name']."<br>"."</center></td>"; 
+                            echo "<td class = table_d1 width = 100><center>".$row['Course']."<br>"."</center></td>"; 
                             echo "<td class = table_d1 width = 100><center>".$row['Count(SID)']."<br>"."</center></td>";  
                             echo "</tr>"; 
                         } 

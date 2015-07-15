@@ -1,13 +1,14 @@
 <?php
 session_start();
 require_once 'config.php';
+require_once 'cookies.php';
 if(isset($_POST["iebugaround"])){
     if ($_POST['Upload_File']){
         if(!isset($_FILES['fileToUpload']) || $_FILES['fileToUpload']['error'] == UPLOAD_ERR_NO_FILE){
             header('Location: test5.php');
         }else{
-            $_SESSION['Term'] = $_POST['Term'];
-            $_SESSION['Year'] = $_POST['Year'];
+            $_SESSION['FileTerm'] = $_POST['FileTerm'];
+            $_SESSION['FileYear'] = $_POST['FileYear'];
             $target_dir = 'uploads/';
             $target_file = $target_dir . basename($_FILES['fileToUpload']['name']);
             $uploadOk = 1;
@@ -30,7 +31,7 @@ if(isset($_POST["iebugaround"])){
             } else {
             if (move_uploaded_file($_FILES['fileToUpload']['tmp_name'], $target_file)) {
                 echo "The file ". basename( $_FILES['fileToUpload']['name']). " has been uploaded.";
-                header('Location: test3.php');
+                header('Location: main.php');
             } else {
                 echo "Sorry, there was an error uploading your file.";
                 }
@@ -63,6 +64,8 @@ if(isset($_POST["iebugaround"])){
                         <li class="hide-from-printer"><a href="TermStats.php" class="hide-from-printer">Term Statistics</a></li>
                     </ul>                     
                 </li>
+                <li class="hide-from-printer"><a href="Upload.php">Upload</a>               
+                </li>                
                 <li class="hide-from-printer"><a href="logout.php">Sign Out</a>
                 </li>
             </ul>
@@ -79,7 +82,7 @@ if(isset($_POST["iebugaround"])){
                         </td> 
                         <td>
                             <label>&emsp;&emsp;&emsp;Term</label>
-                            <fieldset class="fieldset3">&emsp;&emsp;&emsp;&nbsp;<select name="Term">
+                            <fieldset class="fieldset3">&emsp;&emsp;&emsp;&nbsp;<select name="FileTerm">
                                                             <option value="Spring">Spring</option>
                                                             <option value="Summer">Summer</option>
                                                             <option value="Fall">Fall</option>
@@ -87,7 +90,7 @@ if(isset($_POST["iebugaround"])){
                         </td>
                         <td>
                             <label>&nbsp;Year</label>
-                            <fieldset class="fieldset3"><select name="Year">
+                            <fieldset class="fieldset3"><select name="FileYear">
                                                             <option value="y"><?php echo $y; ?></option> 
                                                             <option value="y1"><?php echo $y1; ?></option>
                                                             <option value="y2"><?php echo $y2; ?></option>      

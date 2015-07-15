@@ -8,37 +8,50 @@ $err = 0;
 
 if(isset($_POST["iebugaround"])){
 //lets fetch posted details
-$studentname = $_POST['studentname'];
-$studentID = $_POST['studentID'];
+$Firstname = $_POST['Firstname'];
+$Lastname = $_POST['Lastname'];
+$StudentID = $_POST['StudentID'];
 
-//check studentname is present and alphabetic
-    if(empty($studentname) || (!ctype_alpha ($studentname))){
+//check student Firstname is present and alphabetic
+    if(empty($Firstname) || (!ctype_alpha ($Firstname))){
     //let echo error message
-    $errors[] = "Please input a Student Name";
+    $errors[] = "Please input a Student First Name";
     $err = 1;
     }
+//check student Lastname is present and alphabetic
+    elseif(empty($Lastname) || (!ctype_alpha ($Lastname))){
+    //let echo error message
+    $errors[] = "Please input a Student Last Name";
+    $err = 2;
+    }
  //check studentid is present and numeric
-    if(empty($studentID) || (!ctype_digit ($studentID))){
+    elseif(empty($StudentID) || (!ctype_digit ($StudentID))){
     //let echo error message
     $errors[] = "Please input a Student ID";
-    $err = 2;
-    }   
-    // Check if Id is already in
+    $err = 3;
+    }else{   
+    // Check if Student is already in
     mysql_connect($host, $username, $password) or
         die("Could not connect: " . mysql_error());
     mysql_select_db($db_name);
-    $result = mysql_query("SELECT sn FROM tt1 where sid = $studentID");
-    $row = mysql_fetch_row($result);
+    $result = mysql_query("SELECT Fname FROM Advised_Students where SID =$StudentID AND Lname = '$Lastname' AND Fname = '$Firstname'");
     if (mysql_num_rows($result)> 0) {
         $errors[] = "Please input another Student ID, There is a Student exist with the current ID";
-        $err = 3;
+        $err = 4;
+    }else{
+        $result = mysql_query("SELECT Fname FROM Grad_Students where SID =$StudentID AND Lname = '$Lastname' AND Fname = '$Firstname'");
+        if (mysql_num_rows($result)> 0) {
+            $errors[] = "Please input another Student ID, There is a Student exist with the current ID";
+            $err = 4;
+            }
+        }
     }
-    
     if(!$errors){
-    $_SESSION['studentname'] = $_POST['studentname'];
-    $_SESSION['studentID'] = $_POST['studentID'];
-    $_SESSION['term'] = $_POST['term'];
-    $_SESSION['year'] = $_POST['year'];
+    $_SESSION['Firstname'] = $_POST['Firstname'];
+    $_SESSION['Lastname'] = $_POST['Lastname'];
+    $_SESSION['StudentID'] = $_POST['StudentID'];
+    $_SESSION['Term'] = $_POST['Term'];
+    $_SESSION['Year'] = $_POST['Year'];
     returnheader("NewStudentNotes.php");
     }
 }
@@ -62,7 +75,13 @@ $studentID = $_POST['studentID'];
                     </ul>
                 </li>
                 <li class="hide-from-printer"><a href="Statistics.php">Statistics</a>
+                    <ul>
+                        <li class="hide-from-printer"><a href="GeneralStats.php" class="hide-from-printer">General Statistics</a></li>
+                        <li class="hide-from-printer"><a href="TermStats.php" class="hide-from-printer">Term Statistics</a></li>
+                    </ul>                     
                 </li>
+                <li class="hide-from-printer"><a href="Upload.php">Upload</a>               
+                </li>                
                 <li class="hide-from-printer"><a href="logout.php">Sign Out</a>
                 </li>
             </ul>
@@ -74,16 +93,20 @@ $studentID = $_POST['studentID'];
                 <table>
                     <tr> 
                         <td>
-                            <label>&emsp;Student Name</label>
-                            <fieldset class="fieldset3"><input type="text" name="studentname" class="requiredField1" /></fieldset>
+                            <label>&emsp;First Name</label>
+                            <fieldset class="fieldset3"><input type="text" name="Firstname" class="requiredField1" /></fieldset>
+                        </td> 
+                        <td>
+                            <label>&emsp;Last Name</label>
+                            <fieldset class="fieldset3"><input type="text" name="Lastname" class="requiredField1" /></fieldset>
                         </td> 
                         <td>
                             <label>&emsp;Student ID</label>
-                            <fieldset class="fieldset3"><input type="text" name="studentID" class="requiredField1" /></fieldset>
+                            <fieldset class="fieldset3"><input type="text" name="StudentID" class="requiredField1" /></fieldset>
                         </td>
                         <td>
                             <label>&emsp;&emsp;&emsp;Term</label>
-                            <fieldset class="fieldset4">&emsp;&emsp;&emsp;&nbsp;<select name="term">
+                            <fieldset class="fieldset4">&emsp;&emsp;&emsp;&nbsp;<select name="Term">
                                                             <option value="Spring">Spring</option>
                                                             <option value="Summer">Summer</option>
                                                             <option value="Fall">Fall</option>
@@ -91,7 +114,7 @@ $studentID = $_POST['studentID'];
                         </td>
                         <td>
                             <label>&nbsp;Year</label>
-                            <fieldset class="fieldset3"><select name="year">
+                            <fieldset class="fieldset3"><select name="Year">
                                                             <option value="y"><?php echo $y; ?></option> 
                                                             <option value="y1"><?php echo $y1; ?></option>
                                                             <option value="y2"><?php echo $y2; ?></option>       
@@ -103,15 +126,20 @@ $studentID = $_POST['studentID'];
                     <?php
                     if($err == 1 ){
                     echo '<script>';
-                    echo 'alert("Please input a Student Name");';
+                    echo 'alert("Please input a Student First Name");';
                     echo 'location.href="NewStudent.php"';
                     echo '</script>';
-                    }elseif($err == 2 ){
+                    }elseif($err == 2){
+                    echo '<script>';
+                    echo 'alert("Please input a Student Last Name");';
+                    echo 'location.href="NewStudent.php"';
+                    echo '</script>';
+                    }elseif($err == 3){
                     echo '<script>';
                     echo 'alert("Please input a Student ID");';
                     echo 'location.href="NewStudent.php"';
                     echo '</script>'; 
-                    }elseif($err == 3 ){
+                    }elseif($err == 4 ){
                     echo '<script>';
                     echo 'alert("Please input another Student ID, There is a Student exist with the current ID");';
                     echo 'location.href="NewStudent.php"';
