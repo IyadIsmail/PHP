@@ -16,18 +16,18 @@ if(isset($_POST["iebugaround"])){
     $errors[] = "Please input a Student ID";
     $err = 1;
     }else{   
-        // Check if student is already in
-        //mysql_connect($host, $username, $password) or
-            //die("Could not connect: " . mysql_error());
-        //mysql_select_db($db_name);
-        //$result = mysql_query("SELECT Fname FROM Advised_Students where SID =$StudentID");
-        //if (mysql_num_rows($result)== 0) {
-            //$result = mysql_query("SELECT Fname FROM Grad_Students where SID =$StudentID");
-            //if (mysql_num_rows($result)== 0) {
-                //$errors[] = "Please input another Student, There is no Student exist with the Current Input";
-                //$err = 3;
-                //}        
-        //}       
+         //Check if student is already in
+        mysql_connect($host, $username, $password) or
+            die("Could not connect: " . mysql_error());
+        mysql_select_db($db_name);
+        $result = mysql_query("SELECT Fname FROM Advised_Students where SID =$StudentID");
+        if (mysql_num_rows($result)== 0) {
+            $result = mysql_query("SELECT Fname FROM Grad_Students where SID =$StudentID");
+            if (mysql_num_rows($result)== 0) {
+                $errors[] = "Please input another Student, There is no Student exist with the Current Input";
+                $err = 2;
+                }        
+        }       
     }
     if(!$errors){      
     $_SESSION['StudentID'] = $_POST['StudentID'];
@@ -120,6 +120,11 @@ if(isset($_POST["iebugaround"])){
                     echo 'alert("Please input a Student ID");';
                     echo 'location.href="ExistingStudent.php"';
                     echo '</script>';
+                    }elseif($err == 2 ){
+                    echo '<script>';
+                    echo 'alert("Please input another Student ID, There is no Student exist with the current ID");';
+                    echo 'location.href="ExistingStudent.php"';
+                    echo '</script>'; 
                     } else {
                         $err == 0;
                     }

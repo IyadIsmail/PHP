@@ -3,11 +3,11 @@ session_start();
 require_once 'cookies.php';
 require_once 'config.php';
 
-$FirstName = $_SESSION['FirstName'];
-$LastName = $_SESSION['LastName'];
-$FirstName1 = $_SESSION['FirstName1'];
-$LastName1 = $_SESSION['LastName1'];
-$StudentID = $_SESSION['StudentID'];
+        $FirstName = $_SESSION['FirstName'];
+        $LastName = $_SESSION['LastName'];
+        $FirstName1 = $_SESSION['FirstName1'];
+        $LastName1 = $_SESSION['LastName1'];
+        $StudentID = $_SESSION['StudentID'];
 $Term = $_SESSION['Term'];
 $Year = $_SESSION['Year'];
 if ($Year == 'y'){
@@ -45,6 +45,7 @@ if(isset($_POST["iebugaround"])){
     $out = preg_replace('/\s\n/', ',', $area);
     
     if($_POST['Save']) {  
+
         if ($FirstName1 != 'None'){
             $FirstName = $FirstName1;
             $LastName = $LastName1;
@@ -122,8 +123,6 @@ if(isset($_POST["iebugaround"])){
             <form action="#" method="post">
                 <input name="iebugaround" type="hidden" value="1">
                     <?php
-                        $LastName = $_SESSION['LastName'];
-                        $FirstName = $_SESSION['FirstName'];
                         if($FirstName == ' '){
                             echo "<h3><font color=#999>&emsp;This Student have not Finished any course yet........</font></h3>";
                         }else{

@@ -242,7 +242,14 @@ input[type=text]:focus,input[type=password]:focus,input.text:focus,input.title:f
         position: relative;
         left: 20px;
 }
-
+.requiredField5{
+	width:350px;
+        font-family: Georgia, "Times New Roman", Times, serif;
+        color: #999;
+        font-size: 14pt;
+        position: relative;
+        left: 20px;
+}
 @media print {
   /* style sheet for print goes here */
   .node-links, 

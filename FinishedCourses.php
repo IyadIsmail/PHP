@@ -5,7 +5,6 @@ require_once 'config.php';
 
 $LastName = $_SESSION['LastName'];
 $FirstName = $_SESSION['FirstName'];
-//if($FirstName = ' ')//{echo "Hi";}
 $StudentID = $_SESSION['StudentID'];
 $Term = $_SESSION['Term'];
 $Year = $_SESSION['Year'];
@@ -26,6 +25,7 @@ if(isset($_POST["iebugaround"])){
         $result = mysql_query("SELECT Fname FROM Advised_Students where SID = $StudentID");      
         if (mysql_num_rows($result)== 0) {
             $_SESSION['FirstName1'] = 'None';
+            $_SESSION['LastName1'] = 'None';
             header('Location: ExistingStudentNotes.php');            
         }else{
             header('Location: PreviousNotes.php');

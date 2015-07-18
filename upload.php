@@ -77,19 +77,19 @@ if(isset($_POST["iebugaround"])){
                     <tr>
                         <td>
                             <label>&emsp;Select File to upload:</label>
-                            <fieldset class="fieldset3"><input type="file" name="fileToUpload" class="requiredField1" value ="1"/></fieldset>
+                            <fieldset class="fieldset3"><input type="file" name="fileToUpload" class="requiredField5" value ="1"/></fieldset>
                         </td> 
                         <td>
-                            <label>&emsp;&emsp;&emsp;Term</label>
-                            <fieldset class="fieldset3">&emsp;&emsp;&emsp;&nbsp;<select name="FileTerm">
+                            <label>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;Term</label>
+                            <fieldset class="fieldset3">&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;<select name="FileTerm">
                                                             <option value="Spring">Spring</option>
                                                             <option value="Summer">Summer</option>
                                                             <option value="Fall">Fall</option>
                                                         </select></fieldset>
                         </td>
                         <td>
-                            <label>&nbsp;Year</label>
-                            <fieldset class="fieldset3"><select name="FileYear">
+                            <label>&emsp;&nbsp;&nbsp;Year</label>
+                            <fieldset class="fieldset3">&emsp;&emsp;<select name="FileYear">
                                                             <option value="y"><?php echo $y; ?></option> 
                                                             <option value="y1"><?php echo $y1; ?></option>
                                                             <option value="y2"><?php echo $y2; ?></option>      
