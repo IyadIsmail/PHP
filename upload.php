@@ -16,7 +16,6 @@ if(isset($_POST["iebugaround"])){
             // Check file size
             if ($_FILES['fileToUpload']['size'] > 500000) {
                 echo "Sorry, your file is too large.";
-                //header('Location: test5.php');
                 $uploadOk = 0;
             }
             // Allow certain file formats
@@ -47,7 +46,7 @@ if(isset($_POST["iebugaround"])){
         <link rel="stylesheet" type="text/css" href="Styles/StyleSheet.css" />
         <link rel="stylesheet" type="text/css" href="Styles/print.css" /> 
         <link href="Styles/style.css" rel="stylesheet" type="text/css" />
-        <title>Advising Notes</title>
+        <title>Upload File</title>
     </head>
     <body>
         <div id="centeredmenu">
@@ -58,7 +57,7 @@ if(isset($_POST["iebugaround"])){
                         <li class="hide-from-printer"><a href="ExistingStudent.php" class="hide-from-printer">Existing Student</a></li>
                     </ul>
                 </li>
-                <li class="hide-from-printer"><a href="Statistics.php">Statistics</a>
+                <li class="hide-from-printer"><a href="main.php">Statistics</a>
                     <ul>
                         <li class="hide-from-printer"><a href="GeneralStats.php" class="hide-from-printer">General Statistics</a></li>
                         <li class="hide-from-printer"><a href="TermStats.php" class="hide-from-printer">Term Statistics</a></li>

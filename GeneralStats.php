@@ -15,7 +15,7 @@ if(isset($_POST["iebugaround"])){
     <head>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-        <title>"Advising Notes for Existing Student"</title>
+        <title>General Statistics</title>
         <link rel="stylesheet" type="text/css" href="Styles/StyleSheet.css" />
         <link rel="stylesheet" type="text/css" href="Styles/print.css" /> 
         <link href="Styles/style.css" rel="stylesheet" type="text/css" />
@@ -35,7 +35,7 @@ if(isset($_POST["iebugaround"])){
                         <li class="hide-from-printer"><a href="ExistingStudent.php" class="hide-from-printer">Existing Student</a></li>
                     </ul>
                 </li>
-                <li class="hide-from-printer"><a href="Statistics.php">Statistics</a>
+                <li class="hide-from-printer"><a href="main.php">Statistics</a>
                     <ul>
                         <li class="hide-from-printer"><a href="GeneralStats.php" class="hide-from-printer">General Statistics</a></li>
                         <li class="hide-from-printer"><a href="TermStats.php" class="hide-from-printer">Term Statistics</a></li>
@@ -61,23 +61,32 @@ if(isset($_POST["iebugaround"])){
                 $res = mysql_query("SELECT Count(SID) FROM Grad_Students");
                 $row = mysql_fetch_array($res);
                 $num_rows = $row[0];
-                $result = mysql_query("SELECT Grad_Courses.Course_Name,Count(SID) FROM Grad_Courses,Core_Courses WHERE Grad_Courses.Course_Name = Core_Courses.Course_Name GROUP BY Grad_Courses.Course_Name ORDER BY Grad_Courses.Course_Name");
-                if (mysql_num_rows($result) > 0) { 
-                    echo "<h3><font color=#999>&emsp;Core Courses Needed</font></h3>";
-                    echo "<table class=requiredField4 border = 1>"; 
-                    echo "<tr>";
-                    echo "<td class = table_d1 width = 100><center>Course Name</center></td>";
-                    echo "<td class = table_d1 width = 100><center>Totally</center></td>";                
-                    echo "</tr>"; 
-                    while($row = mysql_fetch_array($result)) { 
-                        $c = $num_rows - $row['Count(SID)'];
-                        echo "<tr>"; 
-                        echo "<td class = table_d1 width = 100><center>". $row['Course_Name']."<br>"."</center></td>"; 
-                        echo "<td class = table_d1 width = 100><center>". $c."<br>"."</center></td>";  
-                        echo "</tr>"; 
+                $result = mysql_query("SELECT Course_Name FROM Core_Courses ORDER BY Course_Name");
+                echo "<h3><font color=#999>&emsp;Core Courses Needed</font></h3>";
+                echo "<table class=requiredField4 border = 1>";
+                echo "<tr>";
+                echo "<td class = table_d1 width = 100><center>Course Name</center></td>";
+                echo "<td class = table_d1 width = 100><center>Totally</center></td>";                
+                echo "</tr>"; 
+                while($row = mysql_fetch_array($result)) {
+                    $CName = $row['Course_Name'];
+                    $result1 = mysql_query("SELECT Count(SID) FROM Courses_Taken WHERE Course_Name = '$CName'"); 
+                    $row1 = mysql_fetch_row($result1);
+                        $cc = $row1[0];
+                        if ($cc > 0) { 
+                            $c = $num_rows - $cc; 
+                            echo "<tr>"; 
+                            echo "<td class = table_d1 width = 100><center>". $CName."<br>"."</center></td>"; 
+                            echo "<td class = table_d1 width = 100><center>". $c."<br>"."</center></td>";  
+                            echo "</tr>"; 
+                        }else{
+                            echo "<tr>"; 
+                            echo "<td class = table_d1 width = 100><center>". $CName."<br>"."</center></td>"; 
+                            echo "<td class = table_d1 width = 100><center>". $num_rows."<br>"."</center></td>";  
+                            echo "</tr>";   
+                        }
                     } 
-                    echo "</table>"; 
-                }     
+                    echo "</table>";    
                 ?>
             <table>
                 <tr> 

@@ -26,7 +26,7 @@ $FileYear = '';
                         <li class="hide-from-printer"><a href="ExistingStudent.php" class="hide-from-printer">Existing Student</a></li>
                     </ul>
                 </li>
-                <li class="hide-from-printer"><a href="Statistics.php">Statistics</a>
+                <li class="hide-from-printer"><a href="main.php">Statistics</a>
                     <ul>
                         <li class="hide-from-printer"><a href="GeneralStats.php" class="hide-from-printer">General Statistics</a></li>
                         <li class="hide-from-printer"><a href="TermStats.php" class="hide-from-printer">Term Statistics</a></li>
@@ -86,14 +86,18 @@ $FileYear = '';
                         $fname = substr($fname,0,$pos1);
                     }
                     $fname = str_replace('<br>', '', $fname);
-                    if ($id != 0){
+                    $sql = "SELECT Course_Name FROM Courses WHERE Course_Name = '$course'";
+                    $result = $conn->query($sql);
+                    if ($result->num_rows > 0)
+                    {
+                        if ($id != 0){
                                 $sql = "SELECT sid FROM Grad_Students where SID ='$id' AND Fname = '$fname' And Lname ='$lname'";
                                 $result = $conn->query($sql);
                                 if ($result->num_rows > 0) { 
-                                    $sql = "SELECT SID FROM Grad_Courses where SID ='$id' AND Fname = '$fname' And Lname ='$lname' AND Course_Name='$course'";
+                                    $sql = "SELECT SID FROM Courses_Taken where SID ='$id' AND Fname = '$fname' And Lname ='$lname' AND Course_Name='$course'";
                                     $result1 = $conn->query($sql);
-                                    if ($result->num_rows == 0){
-                                        $sql = "INSERT INTO Grad_Courses VALUES ($id,'$fname','$lname','$course','$FileTerm','$FileY')";  
+                                    if ($result1->num_rows == 0){
+                                        $sql = "INSERT INTO Courses_Taken VALUES ($id,'$fname','$lname','$course','$FileTerm','$FileY')";  
                                         if ($conn->query($sql) === TRUE) {
                                             //echo "New record created successfully";
                                         } else {
@@ -107,7 +111,7 @@ $FileYear = '';
                                     } else {
                                         echo "Error: " . $sql . "<br>" . $conn->error;
                                     }                    
-                                    $sql = "INSERT INTO Grad_Courses VALUES ($id,'$fname','$lname','$course','$FileTerm','$FileY')";
+                                    $sql = "INSERT INTO Courses_Taken VALUES ($id,'$fname','$lname','$course','$FileTerm','$FileY')";
                                     if ($conn->query($sql) === TRUE) {
                                         //echo "New record created successfully";
                                     } else {
@@ -115,10 +119,11 @@ $FileYear = '';
                                     }                    
                                 }
                             }
-                        }
-                        $conn->close();
-                        fclose($handle);
-                        }
+                    }
+                    }
+                    $conn->close();
+                    fclose($handle);
+                    }
                     } else {
                         $filename = substr($filename,8);
                         echo "<h3><font color=#999>&emsp;Upload $filename </font></h3>";

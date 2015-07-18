@@ -46,7 +46,7 @@ if(isset($_POST["iebugaround"])){
                         <li class="hide-from-printer"><a href="ExistingStudent.php" class="hide-from-printer">Existing Student</a></li>
                     </ul>
                 </li>
-                <li class="hide-from-printer"><a href="Statistics.php">Statistics</a>
+                <li class="hide-from-printer"><a href="main.php">Statistics</a>
                     <ul>
                         <li class="hide-from-printer"><a href="GeneralStats.php" class="hide-from-printer">General Statistics</a></li>
                         <li class="hide-from-printer"><a href="TermStats.php" class="hide-from-printer">Term Statistics</a></li>

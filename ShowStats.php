@@ -26,7 +26,7 @@ if(isset($_POST["iebugaround"])){
     <head>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-        <title>"Advising Notes for Existing Student"</title>
+        <title>Statistics</title>
         <link rel="stylesheet" type="text/css" href="Styles/StyleSheet.css" />
         <link rel="stylesheet" type="text/css" href="Styles/print.css" /> 
         <link href="Styles/style.css" rel="stylesheet" type="text/css" />
@@ -46,7 +46,7 @@ if(isset($_POST["iebugaround"])){
                         <li class="hide-from-printer"><a href="ExistingStudent.php" class="hide-from-printer">Existing Student</a></li>
                     </ul>
                 </li>
-                <li class="hide-from-printer"><a href="Statistics.php">Statistics</a>
+                <li class="hide-from-printer"><a href="main.php">Statistics</a>
                     <ul>
                         <li class="hide-from-printer"><a href="GeneralStats.php" class="hide-from-printer">General Statistics</a></li>
                         <li class="hide-from-printer"><a href="TermStats.php" class="hide-from-printer">Term Statistics</a></li>
@@ -80,7 +80,7 @@ if(isset($_POST["iebugaround"])){
                     die("Could not connect: " . mysql_error());
                 mysql_select_db($db_name);
                 if($Stats == '1'){
-                   $result = mysql_query("SELECT Course_Name,Count_Course FROM Advised_Courses where Term = '$Term' AND Year = '$y' ORDER By Course_Name");
+                   $result = mysql_query("SELECT Course_Name,Count(SID) FROM Advised_Courses where Term = '$Term' AND Year = '$y' GROUP BY Course_Name ORDER By Course_Name");
                     if (mysql_num_rows($result) > 0) { 
                         echo "<h3><font color=#999>&emsp;Advised Courses</font></h3>";
                         echo "<table class=requiredField4 border = 1>"; 
@@ -91,13 +91,13 @@ if(isset($_POST["iebugaround"])){
                         while($row = mysql_fetch_array($result)) { 
                             echo "<tr>"; 
                             echo "<td class = table_d1 width = 100><center>".$row['Course_Name']."<br>"."</center></td>"; 
-                            echo "<td class = table_d1 width = 100><center>".$row['Count_Course']."<br>"."</center></td>";  
+                            echo "<td class = table_d1 width = 100><center>".$row['Count(SID)']."<br>"."</center></td>";  
                             echo "</tr>"; 
                         } 
                         echo "</table>"; 
                     }     
                 }else{
-                   $result = mysql_query("SELECT Course_Name,Count(SID) FROM Grad_Courses where Term = '$Term' AND Year = '$y' GROUP BY Course_Name ORDER By Course_Name");
+                   $result = mysql_query("SELECT Course_Name,Count(SID) FROM Courses_Taken where Term = '$Term' AND Year = '$y' GROUP BY Course_Name ORDER By Course_Name");
                     if (mysql_num_rows($result) > 0) { 
                         echo "<h3><font color=#999>&emsp;Courses Taken</font></h3>";
                         echo "<table class=requiredField4 border = 1>"; 

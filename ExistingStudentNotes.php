@@ -3,9 +3,10 @@ session_start();
 require_once 'cookies.php';
 require_once 'config.php';
 
-$LastName = $_SESSION['LastName'];
 $FirstName = $_SESSION['FirstName'];
+$LastName = $_SESSION['LastName'];
 $FirstName1 = $_SESSION['FirstName1'];
+$LastName1 = $_SESSION['LastName1'];
 $StudentID = $_SESSION['StudentID'];
 $Term = $_SESSION['Term'];
 $Year = $_SESSION['Year'];
@@ -44,9 +45,9 @@ if(isset($_POST["iebugaround"])){
     $out = preg_replace('/\s\n/', ',', $area);
     
     if($_POST['Save']) {  
-        $FirstName2 = $FirstName1;
-        if($FirstName2 = 'None'){
-            $FirstName2 = $FirstName;
+        if ($FirstName1 != 'None'){
+            $FirstName = $FirstName1;
+            $LastName = $LastName1;
         }
         // Create connection
         $conn = new mysqli($host, $username, $password, $db_name);
@@ -54,43 +55,36 @@ if(isset($_POST["iebugaround"])){
         if ($conn->connect_error) {
             die("Connection failed: " . $conn->connect_error);
         } 
-        $sql = "SELECT Fname FROM Advised_Students where SID =$StudentID AND Lname = '$LastName' AND Fname = '$FirstName2'" ;
+        $sql = "SELECT Fname FROM Advised_Students where SID =$StudentID AND Lname = '$LastName' AND Fname = '$FirstName'" ;
         $result = $conn->query($sql);
         if ($result->num_rows == 0) { 
-            $sql = "INSERT INTO Advised_Students VALUES ($StudentID,'$FirstName2','$LastName')";
+            $sql = "INSERT INTO Advised_Students VALUES ($StudentID,'$FirstName','$LastName')";
             if ($conn->query($sql) === TRUE) {
-            echo "New record created successfully";
+            //echo "New record created successfully";
             } else {
-            echo "Error: " . $sql . "<br>" . $conn->error;
+            //echo "Error: " . $sql . "<br>" . $conn->error;
             }
         }
-        $sql = "INSERT INTO Advised_Notes VALUES ($StudentID,'$FirstName2','$LastName', CURDATE(),'$Term','$y','$courses','$out')";
+        $sql = "INSERT INTO Advised_Notes VALUES ($StudentID,'$FirstName','$LastName', CURDATE(),'$Term','$y','$out','$courses')";
         if ($conn->query($sql) === TRUE) {
-            echo "New record created successfully";
+            //echo "New record created successfully";
         } else {
-            echo "Error: " . $sql . "<br>" . $conn->error;
-        }
-        if($Num_courses > 0){   
-            for($count = 0; $count < $Num_courses; $count++){
-                $sql = "SELECT Course_Name FROM Advised_Courses where Course_Name ='$course[$count]' AND Term = '$Term' AND Year = '$y'";
-                $result = $conn->query($sql);
-                if ($result->num_rows > 0) { 
-                    $sql = "UPDATE Advised_Courses SET Count_Courses = Count_Courses+1 WHERE Course_Name = '$course[$count]' AND Term = '$Term' AND Year = '$y'";  
-            }else{
-                    $sql = "INSERT INTO Advised_Courses VALUES ('$course[$count]','$Term','$y',1)";
+            //echo "Error: " . $sql . "<br>" . $conn->error;
+        }  
+        for($count = 0; $count < $Num_courses; $count++){
+           // echo $
+            $sql = "INSERT INTO Advised_Courses VALUES ($StudentID,'$FirstName','$LastName','$course[$count]','$Term','$y')";
+            if ($conn->query($sql) === TRUE) {
+                //echo "New record created successfully";
+            } else {
+                //echo "Error: " . $sql . "<br>" . $conn->error;
             }
-            
-        if ($conn->query($sql) === TRUE) {
-            echo "New record created successfully";
-        } else {
-            echo "Error: " . $sql . "<br>" . $conn->error;
-        }
         }
         $conn->close();
         header('Location: print.php');
     } 
 }
-}
+
 ?>
 
 <html>
@@ -100,7 +94,7 @@ if(isset($_POST["iebugaround"])){
         <link rel="stylesheet" type="text/css" href="Styles/StyleSheet.css" />
         <link rel="stylesheet" type="text/css" href="Styles/print.css" /> 
         <link href="Styles/style.css" rel="stylesheet" type="text/css" />
-        <title>Advising Notes</title>
+        <title>Existing Student Notes</title>
     </head>
     <body>
         <div id="centeredmenu">
@@ -111,7 +105,7 @@ if(isset($_POST["iebugaround"])){
                         <li class="hide-from-printer"><a href="ExistingStudent.php" class="hide-from-printer">Existing Student</a></li>
                     </ul>
                 </li>
-                <li class="hide-from-printer"><a href="Statistics.php">Statistics</a>
+                <li class="hide-from-printer"><a href="main.php">Statistics</a>
                     <ul>
                         <li class="hide-from-printer"><a href="GeneralStats.php" class="hide-from-printer">General Statistics</a></li>
                         <li class="hide-from-printer"><a href="TermStats.php" class="hide-from-printer">Term Statistics</a></li>
@@ -128,8 +122,9 @@ if(isset($_POST["iebugaround"])){
             <form action="#" method="post">
                 <input name="iebugaround" type="hidden" value="1">
                     <?php
-                        //$FirstName = $_SESSION['FirstName'];
-                        if($FirstName == ''){
+                        $LastName = $_SESSION['LastName'];
+                        $FirstName = $_SESSION['FirstName'];
+                        if($FirstName == ' '){
                             echo "<h3><font color=#999>&emsp;This Student have not Finished any course yet........</font></h3>";
                         }else{
                             $Courses_Finished = array(); 
@@ -137,30 +132,38 @@ if(isset($_POST["iebugaround"])){
                             mysql_connect($host, $username, $password) or
                                 die("Could not connect: " . mysql_error());
                             mysql_select_db($db_name);
-                            $result = mysql_query("SELECT Course_Name FROM Grad_Courses where SID = $StudentID and Lname = '$LastName' and Fname = '$FirstName' ");
-                            $cor = '';    
-                            while($row = mysql_fetch_array($result)) {
-                                $cor = $cor.$row['Course_Name'].'-';
-                                //Used to highlight course
-                                $Courses_Finished[$row['Course_Name']] = 1;
+                            $result = mysql_query("SELECT Course_Name FROM Courses_Taken where SID = $StudentID and Lname = '$LastName' and Fname = '$FirstName'");
+                            $num_rows = mysql_num_rows($result);
+                            if($num_rows == 0){
+                                echo "<h3><font color=#999>&emsp;This Student have not Finished any course yet........</font></h3>";
+                            }else{
+                                $cor = '';    
+                                while($row = mysql_fetch_array($result)) {
+                                    $cor = $cor.$row['Course_Name'].'-';
+                                    //Used to highlight course
+                                    $Courses_Finished[$row['Course_Name']] = 1;
+                                }
+                                $cor = substr($cor, 0, -1);
+                                echo "<h3><font color=#999>&emsp;Finished Courses</font></h3>";
+                                echo "<table class=requiredField3 border = 1>";
+                                echo "<tr>"; 
+                                echo "<td class = table_d1 width = 250 style = padding-left:10px>".$cor."</td>"; 
+                                echo "</tr>"; 
+                                echo "</table>";
                             }
-                            $cor = substr($cor, 0, -1);
-                            echo "<h3><font color=#999>&emsp;Finished Courses</font></h3>";
-                            echo "<table class=requiredField3 border = 1>";
-                            echo "<tr>"; 
-                            echo "<td class = table_d1 width = 250 style = padding-left:10px>".$cor."</td>"; 
-                            echo "</tr>"; 
-                            echo "</table>";   
                         }
                     ?>
                    <?php
-                        //$FirstName1 = $_SESSION['FirstName1'];
                         // Create connection
                         mysql_connect($host, $username, $password) or
                             die("Could not connect: " . mysql_error());
                         mysql_select_db($db_name);
-                        $result = mysql_query("SELECT Date,Term,Year,Other_Notes,Courses_Advised FROM Advised_Notes Where SID = $StudentID and Lname = '$LastName' and Fname = '$FirstName1'");
-                        if($FirstName1 == 'None'){
+                        $result = mysql_query("SELECT Date,Term,Year,Courses_Advised,Notes FROM Advised_Notes Where SID = $StudentID and Lname = '$LastName1' and Fname = '$FirstName1'");
+                        $num_rows1 = mysql_num_rows($result);
+                        if($num_rows == 0 & $num_rows1 == 0){
+                            header('Location: NewStudent.php');
+                        }
+                        if($num_rows1 == 0){
                             echo "<h3><font color=#999>&emsp;This Student have no Previous Notes.....</font></h3>";
                         }else{
                             echo "<h3><font color=#999>&emsp;Previous Notes</font></h3>";
@@ -174,7 +177,7 @@ if(isset($_POST["iebugaround"])){
                             echo "</tr>";    
                             while($row = mysql_fetch_array($result)){ 
                                 $cor = str_replace(' ', '<br>', $row['Courses_Advised']);
-                                $out = str_replace(',', '<br>', $row['Other_Notes']);
+                                $out = str_replace(',', '<br>', $row['Notes']);
                                 echo "<tr>"; 
                                 echo "<td class = table_d1 width = 120><center>".$row['Date']."<br>"."</center></td>"; 
                                 echo "<td class = table_d1 width = 250 style = padding-left:10px>".nl2br($cor)."<br>"."</td>"; 

@@ -30,7 +30,7 @@ if(isset($_POST["iebugaround"])){
         for($count = 1; $count < $Num_courses; $count++){
             $courses = $courses.' '.$course[$count];  
         }
-    }
+    }    
     for($count=$Num_courses; $count < 6; $count++)
      $course[$count] = '';
     $Course1 = $course[0];
@@ -53,38 +53,31 @@ if(isset($_POST["iebugaround"])){
         if ($conn->connect_error) {
             die("Connection failed: " . $conn->connect_error);
         } 
-        $sql = "INSERT INTO Advised_Students VALUES ($StudentID,'$Firstname','$Lastname')";
-        if ($conn->query($sql) === TRUE) {
-            echo "New record created successfully";
-        } else {
-            echo "Error: " . $sql . "<br>" . $conn->error;
-        }
-        $sql = "INSERT INTO Advised_Notes VALUES ($StudentID,'$Firstname','$Lastname', CURDATE(),'$Term','$y','$courses','$out')";
-        if ($conn->query($sql) === TRUE) {
-            echo "New record created successfully";
-        } else {
-            echo "Error: " . $sql . "<br>" . $conn->error;
-        }
-        if($Num_courses > 0){   
-            for($count = 0; $count < $Num_courses; $count++){
-                $sql = "SELECT Course_Name FROM Advised_Courses where Course_Name ='$course[$count]' AND Term = '$Term' AND Year = '$y'";
-                $result = $conn->query($sql);
-                if ($result->num_rows > 0) { 
-                    $sql = "UPDATE Advised_Courses SET Count_Courses = Count_Courses+1 WHERE Course_Name = '$course[$count]' AND Term = '$Term' AND Year = '$y'";  
-            }else{
-                    $sql = "INSERT INTO Advised_Courses VALUES ('$course[$count]','$Term','$y',1)";
+        if($Num_courses > 0){
+            $sql = "INSERT INTO Advised_Students VALUES ($StudentID,'$Firstname','$Lastname')";
+            if ($conn->query($sql) === TRUE) {
+            //echo "New record created successfully";
+            } else {
+                echo "Error: " . $sql . "<br>" . $conn->error;
             }
-            
-        if ($conn->query($sql) === TRUE) {
-            echo "New record created successfully";
-        } else {
-            echo "Error: " . $sql . "<br>" . $conn->error;
-        }
+            $sql = "INSERT INTO Advised_Notes VALUES ($StudentID,'$Firstname','$Lastname', CURDATE(),'$Term','$y','$out','$courses')";
+            if ($conn->query($sql) === TRUE) {
+            //echo "New record created successfully";
+            } else {
+                echo "Error: " . $sql . "<br>" . $conn->error;
+            }   
+            for($count = 0; $count < $Num_courses; $count++){
+                $sql = "INSERT INTO Advised_Courses VALUES ($StudentID,'$Firstname','$Lastname','$course[$count]','$Term','$y')";
+                if ($conn->query($sql) === TRUE) {
+                //echo "New record created successfully";
+                } else {
+                    echo "Error: " . $sql . "<br>" . $conn->error;
+                }
+            }
         }
         $conn->close();
         header('Location: print.php');
     } 
-}
 }
 ?>
              
@@ -95,7 +88,7 @@ if(isset($_POST["iebugaround"])){
         <link rel="stylesheet" type="text/css" href="Styles/StyleSheet.css" />
         <link rel="stylesheet" type="text/css" href="Styles/print.css" /> 
         <link href="Styles/style.css" rel="stylesheet" type="text/css" />
-        <title>Advising Notes</title>
+        <title>New Student Notes</title>
     </head>
     <body>  
         <div id="centeredmenu">
@@ -106,7 +99,7 @@ if(isset($_POST["iebugaround"])){
                         <li class="hide-from-printer"><a href="ExistingStudent.php" class="hide-from-printer">Existing Student</a></li>
                     </ul>
                 </li>
-                <li class="hide-from-printer"><a href="Statistics.php">Statistics</a>
+                <li class="hide-from-printer"><a href="main.php">Statistics</a>
                     <ul>
                         <li class="hide-from-printer"><a href="GeneralStats.php" class="hide-from-printer">General Statistics</a></li>
                         <li class="hide-from-printer"><a href="TermStats.php" class="hide-from-printer">Term Statistics</a></li>

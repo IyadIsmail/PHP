@@ -69,7 +69,7 @@ if(isset($_POST["iebugaround"])){
     <head>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-        <title>"Advising Notes for New Student"</title>
+        <title>Print</title>
         <link rel="stylesheet" type="text/css" href="Styles/StyleSheet.css" />
         <link rel="stylesheet" type="text/css" href="Styles/print.css" /> 
         <link href="Styles/style.css" rel="stylesheet" type="text/css" />
@@ -96,6 +96,8 @@ if(isset($_POST["iebugaround"])){
                         <li class="hide-from-printer"><a href="TermStats.php" class="hide-from-printer">Term Statistics</a></li>
                     </ul> 
                 </li>
+                <li class="hide-from-printer"><a href="Upload.php">Upload</a>               
+                </li>               
                 <li class="hide-from-printer"><a href="logout.php">Sign Out</a>
                 </li>
             </ul>

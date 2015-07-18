@@ -8,35 +8,28 @@ $err = 0;
 
 if(isset($_POST["iebugaround"])){
     //lets fetch posted details
-    $LastName = $_POST['LastName'];
     $StudentID = $_POST['StudentID'];
     
-    if(empty($LastName) || (!ctype_alpha ($LastName))){
-    //let echo error message
-    $errors[] = "Please input a Student Last Name";
-    $err = 1;
-    }
     //check studentid is present and numeric
-    elseif(empty($StudentID) || (!ctype_digit ($StudentID))){
+    if(empty($StudentID) || (!ctype_digit ($StudentID))){
     //let echo error message
     $errors[] = "Please input a Student ID";
-    $err = 2;
+    $err = 1;
     }else{   
         // Check if student is already in
-        mysql_connect($host, $username, $password) or
-            die("Could not connect: " . mysql_error());
-        mysql_select_db($db_name);
-        $result = mysql_query("SELECT Fname FROM Advised_Students where SID =$StudentID AND Lname = '$LastName'");
-        if (mysql_num_rows($result)== 0) {
-            $result = mysql_query("SELECT Fname FROM Grad_Students where SID =$StudentID AND Lname = '$LastName'");
-            if (mysql_num_rows($result)== 0) {
-                $errors[] = "Please input another Student, There is no Student exist with the Current Input";
-                $err = 3;
-                }        
-        }       
+        //mysql_connect($host, $username, $password) or
+            //die("Could not connect: " . mysql_error());
+        //mysql_select_db($db_name);
+        //$result = mysql_query("SELECT Fname FROM Advised_Students where SID =$StudentID");
+        //if (mysql_num_rows($result)== 0) {
+            //$result = mysql_query("SELECT Fname FROM Grad_Students where SID =$StudentID");
+            //if (mysql_num_rows($result)== 0) {
+                //$errors[] = "Please input another Student, There is no Student exist with the Current Input";
+                //$err = 3;
+                //}        
+        //}       
     }
-    if(!$errors){
-    $_SESSION['LastName'] = $_POST['LastName'];        
+    if(!$errors){      
     $_SESSION['StudentID'] = $_POST['StudentID'];
     $_SESSION['Term'] = $_POST['Term'];
     $_SESSION['Year'] = $_POST['Year'];
@@ -44,13 +37,15 @@ if(isset($_POST["iebugaround"])){
         mysql_connect($host, $username, $password) or
         die("Could not connect: " . mysql_error());
         mysql_select_db($db_name);
-        $result = mysql_query("SELECT Fname FROM Grad_Students where SID = $StudentID and Lname = '$LastName'");
+        $result = mysql_query("SELECT Fname,Lname FROM Grad_Students where SID = $StudentID");
         if (mysql_num_rows($result)== 0) {
             $_SESSION['FirstName'] = '';
+            $_SESSION['LastName'] = '';
             header('Location: FinishedCourses.php');            
         }elseif(mysql_num_rows($result)== 1){
             $row = mysql_fetch_array($result);
             $_SESSION['FirstName'] = $row['Fname'];
+            $_SESSION['LastName'] = $row['Lname'];
             header('Location: FinishedCourses.php');
         }else{
             header('Location: GradChoose.php');
@@ -67,7 +62,7 @@ if(isset($_POST["iebugaround"])){
         <link rel="stylesheet" type="text/css" href="Styles/StyleSheet.css" />
         <link rel="stylesheet" type="text/css" href="Styles/print.css" /> 
         <link href="Styles/style.css" rel="stylesheet" type="text/css" />
-        <title>Advising Notes</title>
+        <title>Existing Student</title>
     </head>
     <body>
         <div id="centeredmenu">
@@ -78,7 +73,7 @@ if(isset($_POST["iebugaround"])){
                         <li class="hide-from-printer"><a href="ExistingStudent.php" class="hide-from-printer">Existing Student</a></li>
                     </ul>
                 </li>
-                <li class="hide-from-printer"><a href="Statistics.php">Statistics</a>
+                <li class="hide-from-printer"><a href="main.php">Statistics</a>
                     <ul>
                         <li class="hide-from-printer"><a href="GeneralStats.php" class="hide-from-printer">General Statistics</a></li>
                         <li class="hide-from-printer"><a href="TermStats.php" class="hide-from-printer">Term Statistics</a></li>
@@ -96,10 +91,6 @@ if(isset($_POST["iebugaround"])){
                 <input name="iebugaround" type="hidden" value="1">
                 <table>
                     <tr>
-                        <td>
-                            <label>&emsp;Last Name</label>
-                            <fieldset class="fieldset3"><input type="text" name="LastName" class="requiredField1" /></fieldset>
-                        </td> 
                         <td>
                             <label>&emsp;Student ID</label>
                             <fieldset class="fieldset3"><input type="text" name="StudentID" class="requiredField1" /></fieldset>
@@ -126,19 +117,9 @@ if(isset($_POST["iebugaround"])){
                     <?php
                     if($err == 1 ){
                     echo '<script>';
-                    echo 'alert("Please input a Student Last Name");';
-                    echo 'location.href="ExistingStudent.php"';
-                    echo '</script>';
-                    }elseif($err == 2){
-                    echo '<script>';
                     echo 'alert("Please input a Student ID");';
                     echo 'location.href="ExistingStudent.php"';
-                    echo '</script>'; 
-                    }elseif($err == 3 ){
-                    echo '<script>';
-                    echo 'alert("Please input another Student, There is no Student exist with the Current Input");';
-                    echo 'location.href="ExistingStudent.php"';
-                    echo '</script>'; 
+                    echo '</script>';
                     } else {
                         $err == 0;
                     }

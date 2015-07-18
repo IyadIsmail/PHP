@@ -5,6 +5,7 @@ require_once 'config.php';
 
 $LastName = $_SESSION['LastName'];
 $FirstName = $_SESSION['FirstName'];
+//if($FirstName = ' ')//{echo "Hi";}
 $StudentID = $_SESSION['StudentID'];
 $Term = $_SESSION['Term'];
 $Year = $_SESSION['Year'];
@@ -22,7 +23,7 @@ if(isset($_POST["iebugaround"])){
         mysql_connect($host, $username, $password) or
         die("Could not connect: " . mysql_error());
         mysql_select_db($db_name);
-        $result = mysql_query("SELECT Fname FROM Advised_Students where SID = $StudentID and Lname = '$LastName'");
+        $result = mysql_query("SELECT Fname FROM Advised_Students where SID = $StudentID");      
         if (mysql_num_rows($result)== 0) {
             $_SESSION['FirstName1'] = 'None';
             header('Location: ExistingStudentNotes.php');            
@@ -40,7 +41,7 @@ if(isset($_POST["iebugaround"])){
         <link rel="stylesheet" type="text/css" href="Styles/StyleSheet.css" />
         <link rel="stylesheet" type="text/css" href="Styles/print.css" /> 
         <link href="Styles/style.css" rel="stylesheet" type="text/css" />
-        <title>Advising Notes</title>
+        <title>Finished Courses</title>
     </head>
     <body>
         <div id="centeredmenu">
@@ -51,7 +52,7 @@ if(isset($_POST["iebugaround"])){
                         <li class="hide-from-printer"><a href="ExistingStudent.php" class="hide-from-printer">Existing Student</a></li>
                     </ul>
                 </li>
-                <li class="hide-from-printer"><a href="Statistics.php">Statistics</a>
+                <li class="hide-from-printer"><a href="main.php">Statistics</a>
                     <ul>
                         <li class="hide-from-printer"><a href="GeneralStats.php" class="hide-from-printer">General Statistics</a></li>
                         <li class="hide-from-printer"><a href="TermStats.php" class="hide-from-printer">Term Statistics</a></li>
@@ -68,8 +69,7 @@ if(isset($_POST["iebugaround"])){
             <form action="#" method="post">
                 <input name="iebugaround" type="hidden" value="1">
                     <?php
-                        $FirstName = $_SESSION['FirstName'];
-                        if($FirstName == ''){
+                        if($FirstName == ' '){
                             echo "<h3><font color=#999>&emsp;This Student have not Finished any course yet........</font></h3>";
                         }else{
                             $Courses_Finished = array(); 
@@ -77,20 +77,25 @@ if(isset($_POST["iebugaround"])){
                             mysql_connect($host, $username, $password) or
                                 die("Could not connect: " . mysql_error());
                             mysql_select_db($db_name);
-                            $result = mysql_query("SELECT Course_Name FROM Grad_Courses where SID = $StudentID and Lname = '$LastName' and Fname = '$FirstName' ");
-                            $cor = '';    
-                            while($row = mysql_fetch_array($result)) {
-                                $cor = $cor.$row['Course_Name'].'-';
-                                //Used to highlight course
-                                $Courses_Finished[$row['Course_Name']] = 1;
+                            $result = mysql_query("SELECT Course_Name FROM Courses_Taken where SID = $StudentID and Lname = '$LastName' and Fname = '$FirstName' ");
+                            $num_rows = mysql_num_rows($result);
+                            if($num_rows == 0){
+                                echo "<h3><font color=#999>&emsp;This Student have not Finished any course yet........</font></h3>";
+                            }else{
+                                $cor = '';    
+                                while($row = mysql_fetch_array($result)) {
+                                    $cor = $cor.$row['Course_Name'].'-';
+                                    //Used to highlight course
+                                    $Courses_Finished[$row['Course_Name']] = 1;
+                                }
+                                $cor = substr($cor, 0, -1);
+                                echo "<h3><font color=#999>&emsp;Finished Courses</font></h3>";
+                                echo "<table class=requiredField3 border = 1>";
+                                echo "<tr>"; 
+                                echo "<td class = table_d1 width = 250 style = padding-left:10px>".$cor."</td>"; 
+                                echo "</tr>"; 
+                                echo "</table>"; 
                             }
-                            $cor = substr($cor, 0, -1);
-                            echo "<h3><font color=#999>&emsp;Finished Courses</font></h3>";
-                            echo "<table class=requiredField3 border = 1>";
-                            echo "<tr>"; 
-                            echo "<td class = table_d1 width = 250 style = padding-left:10px>".$cor."</td>"; 
-                            echo "</tr>"; 
-                            echo "</table>";   
                         }
                     ?>
                 <table>

@@ -5,10 +5,17 @@ require_once 'config.php';
 
 $LastName = $_SESSION['LastName'];
 $StudentID = $_SESSION['StudentID'];
-
 if(isset($_POST["iebugaround"])){
-    if (isset($_POST['FirstName'])) {
-        $_SESSION['FirstName1'] = $_POST['FirstName'];
+    if (isset($_POST['StudentName'])) {
+        $StudentName = $_POST['StudentName'];
+        $findme = '-';
+        $pos = strpos($StudentName, $findme);
+        $Fname = substr($StudentName,0,$pos);
+        $Lname = substr($StudentName,$pos+1);
+        $_SESSION['FirstName1'] = $Fname;
+        $_SESSION['LastName1'] = $Lname;
+        //echo $Fname;
+        //echo $Lname;
         header('Location: ExistingStudentNotes.php');
     }else{
         header('Location: PreviousNotes.php');
@@ -25,7 +32,7 @@ if(isset($_POST["iebugaround"])){
         <link rel="stylesheet" type="text/css" href="Styles/StyleSheet.css" />
         <link rel="stylesheet" type="text/css" href="Styles/print.css" /> 
         <link href="Styles/style.css" rel="stylesheet" type="text/css" />
-        <title>Advising Notes</title>
+        <title>Previous Notes</title>
     </head>
     <body>
         <div id="centeredmenu">
@@ -36,7 +43,7 @@ if(isset($_POST["iebugaround"])){
                         <li class="hide-from-printer"><a href="ExistingStudent.php" class="hide-from-printer">Existing Student</a></li>
                     </ul>
                 </li>
-                <li class="hide-from-printer"><a href="Statistics.php">Statistics</a>
+                <li class="hide-from-printer"><a href="main.php">Statistics</a>
                     <ul>
                         <li class="hide-from-printer"><a href="GeneralStats.php" class="hide-from-printer">General Statistics</a></li>
                         <li class="hide-from-printer"><a href="TermStats.php" class="hide-from-printer">Term Statistics</a></li>
@@ -63,15 +70,22 @@ if(isset($_POST["iebugaround"])){
                     mysql_connect($host, $username, $password) or
                     die("Could not connect: " . mysql_error());
                     mysql_select_db($db_name);
-                    $result = mysql_query("SELECT Fname FROM Advised_Students where SID = $StudentID and Lname = '$LastName'");
+                    if($LastName = ' '){
+                        $result = mysql_query("SELECT Fname,Lname FROM Advised_Students where SID = $StudentID");   
+                    }else{
+                        $result = mysql_query("SELECT Fname,Lname FROM Advised_Students where SID = $StudentID and Lname = '$LastName'");
+                    }
                     echo "<table class=requiredField1>";
                     while($row = mysql_fetch_array($result)) {
+                      $Fname = $row['Fname'];
+                      $Lname = $row['Lname'];
+                      $StudentName = $Fname.'-'.$Lname;  
                       echo "<tr>";
-                      echo "<td class = table_d1 width = 250><input type= radio name=FirstName value=$row[Fname]>".ucfirst(strtolower($row['Fname']))." ".ucfirst($LastName)."<br></td>";             
+                      echo "<td class = table_d1 width = 250><input type= radio name=StudentName value=$StudentName>".ucfirst(strtolower($Fname))." ".ucfirst(strtolower($Lname))."<br></td>";             
                       echo "</tr>";     
                     } 
                     echo "<tr>";
-                    echo "<td class = table_d1 width = 250><input type= radio name=FirstName value='None'>"."None of the above"."</td>";
+                    echo "<td class = table_d1 width = 250><input type= radio name=StudentName value='None'>"."None of the above"."</td>";
                     echo "</tr>";
                 ?>
                 </table> 
