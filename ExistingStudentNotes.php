@@ -20,7 +20,8 @@ if($pos > 0){
 //echo $FirstName."<br>";
 //echo $LastName."<br>";
 //echo $FirstName1."<br>";
-//echo $LastName1;
+//echo $LastName1."<br>";
+
 $Term = $_SESSION['Term'];
 $Year = $_SESSION['Year'];
 if ($Year == 'y'){
@@ -97,7 +98,7 @@ if(isset($_POST["iebugaround"])){
         $conn->close();
         $_SESSION['FirstName'] = $FirstName ;
         $_SESSION['LastName'] = $LastName ;
-        header('Location: print.php');
+        //header('Location: print.php');
     } 
 }
 

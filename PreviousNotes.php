@@ -9,11 +9,17 @@ $FirstName = $_SESSION['FirstName'];
 
 if(isset($_POST["iebugaround"])){
     if (isset($_POST['StudentName'])) {
-        $Fname = $_POST['Fname'];
-        $Lname = $_POST['Lname'];
+        $StudentName = $_POST['StudentName'];
+        if ($StudentName == 'None'){
+            $Fname = 'None';
+            $Lname = 'None';
+        }else{
+            $Fname = $_POST['Fname'];
+            $Lname = $_POST['Lname'];   
+        }
         $_SESSION['FirstName1'] = $Fname;
         $_SESSION['LastName1'] = $Lname;
-        echo $Lname;
+        $_SESSION['StudentName'] = $StudentName;
         header('Location: ExistingStudentNotes.php');
     }else{
         header('Location: PreviousNotes.php');
@@ -87,7 +93,7 @@ if(isset($_POST["iebugaround"])){
                       echo "</tr>";     
                     } 
                     echo "<tr>";
-                    echo "<td class = table_d1 width = 250><input type= radio name=StudentName value='None'>"."None of the above"."</td>";
+                    echo "<td class = table_d1 width = 250><input type= radio name=StudentName value=None>"."None of the above"."</td>";
                     echo "</tr>";
                 ?>
                 </table> 
