@@ -250,6 +250,12 @@ input[type=text]:focus,input[type=password]:focus,input.text:focus,input.title:f
         position: relative;
         left: 20px;
 }
+.requiredField6{
+	width:400px;
+        position: relative;
+        left: 20px;
+}
+
 @media print {
   /* style sheet for print goes here */
   .node-links, 

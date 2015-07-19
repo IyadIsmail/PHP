@@ -5,7 +5,7 @@ $password=""; // Mysql password
 $db_name="wiu"; // Database name 
 
 $row = 1;
-if (($handle = fopen("Student Course List.csv", "r")) !== FALSE) {
+if (($handle = fopen("Uploads/Student Course List.csv", "r")) !== FALSE) {
     while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
         $num = count($data);
         $row++;
@@ -26,13 +26,12 @@ if (($handle = fopen("Student Course List.csv", "r")) !== FALSE) {
     $pos = strpos($name, $findme);
     $lname = substr($name,0,$pos);
     $fname = substr($name,$pos+1);
-    $pos1 = strpos($fname, $findme);
-    if ($pos1 != null){
-        $fname = substr($fname,0,$pos1);
-    }
+    $fname = str_replace('-',' ',$fname);
+
     echo $id ."<br>";
     echo $course ."<br>";
     echo $lname ."<br>";
+    echo $name ."<br>";
     echo $fname ."<br>";
     }
     fclose($handle);

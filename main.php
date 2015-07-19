@@ -81,10 +81,7 @@ $FileYear = '';
                     $pos = strpos($name, $findme);
                     $lname = substr($name,0,$pos);
                     $fname = substr($name,$pos+1);
-                    $pos1 = strpos($fname, $findme);
-                    if ($pos1 != null){
-                        $fname = substr($fname,0,$pos1);
-                    }
+                    $fname = str_replace('-',' ',$fname);
                     $fname = str_replace('<br>', '', $fname);
                     $sql = "SELECT Course_Name FROM Courses WHERE Course_Name = '$course'";
                     $result = $conn->query($sql);

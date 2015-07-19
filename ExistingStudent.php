@@ -15,7 +15,11 @@ if(isset($_POST["iebugaround"])){
     //let echo error message
     $errors[] = "Please input a Student ID";
     $err = 1;
-    }else{   
+    }elseif(strlen($StudentID) != 4){
+        $errors[] = "Please input only 4 digit Student ID";
+        $err = 2;
+    }
+    else{   
          //Check if student is already in
         mysql_connect($host, $username, $password) or
             die("Could not connect: " . mysql_error());
@@ -25,7 +29,7 @@ if(isset($_POST["iebugaround"])){
             $result = mysql_query("SELECT Fname FROM Grad_Students where SID =$StudentID");
             if (mysql_num_rows($result)== 0) {
                 $errors[] = "Please input another Student, There is no Student exist with the Current Input";
-                $err = 2;
+                $err = 3;
                 }        
         }       
     }
@@ -121,6 +125,11 @@ if(isset($_POST["iebugaround"])){
                     echo 'location.href="ExistingStudent.php"';
                     echo '</script>';
                     }elseif($err == 2 ){
+                    echo '<script>';
+                    echo 'alert("Please input another Student ID, It should be 4 digit only!!!");';
+                    echo 'location.href="ExistingStudent.php"';
+                    echo '</script>'; 
+                    }elseif($err == 3 ){
                     echo '<script>';
                     echo 'alert("Please input another Student ID, There is no Student exist with the current ID");';
                     echo 'location.href="ExistingStudent.php"';

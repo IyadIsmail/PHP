@@ -3,9 +3,28 @@ session_start();
 require_once 'cookies.php';
 require_once 'config.php';
 
-$Firstname = $_SESSION['Firstname'];
-$Lastname = $_SESSION['Lastname'];
-$Studentname = $Firstname." ".$Lastname;
+$FirstName = $_SESSION['FirstName'];
+$LastName = $_SESSION['LastName'];
+//echo $FirstName;
+echo $LastName;
+$Findme = ' ';
+$pos = strpos($FirstName, $Findme);
+if($pos > 0){
+    $Fname = substr($FirstName,0,$pos);  
+}else{
+    $Fname = $FirstName;
+}
+$pos = strpos($LastName, $Findme);
+echo $pos;
+if($pos > 0){
+    $Lname = substr($LastName,0,$pos);
+}else{
+    $Lname = $LastName;
+}
+//echo $FirstName;
+echo $LastName;
+$Studentname = $Fname." ".$Lname;
+echo $Studentname;
 $StudentID = $_SESSION['StudentID'];
 $Term = $_SESSION['Term'];
 $Year = $_SESSION['Year'];
@@ -54,20 +73,20 @@ if(isset($_POST["iebugaround"])){
             die("Connection failed: " . $conn->connect_error);
         } 
         if($Num_courses > 0){
-            $sql = "INSERT INTO Advised_Students VALUES ($StudentID,'$Firstname','$Lastname')";
+            $sql = "INSERT INTO Advised_Students VALUES ($StudentID,'$FirstName','$LastName')";
             if ($conn->query($sql) === TRUE) {
             //echo "New record created successfully";
             } else {
                 echo "Error: " . $sql . "<br>" . $conn->error;
             }
-            $sql = "INSERT INTO Advised_Notes VALUES ($StudentID,'$Firstname','$Lastname', CURDATE(),'$Term','$y','$out','$courses')";
+            $sql = "INSERT INTO Advised_Notes VALUES ($StudentID,'$FirstName','$LastName', CURDATE(),'$Term','$y','$out','$courses')";
             if ($conn->query($sql) === TRUE) {
             //echo "New record created successfully";
             } else {
                 echo "Error: " . $sql . "<br>" . $conn->error;
             }   
             for($count = 0; $count < $Num_courses; $count++){
-                $sql = "INSERT INTO Advised_Courses VALUES ($StudentID,'$Firstname','$Lastname','$course[$count]','$Term','$y')";
+                $sql = "INSERT INTO Advised_Courses VALUES ($StudentID,'$FirstName','$LastName','$course[$count]','$Term','$y')";
                 if ($conn->query($sql) === TRUE) {
                 //echo "New record created successfully";
                 } else {
@@ -118,7 +137,7 @@ if(isset($_POST["iebugaround"])){
                 <table>
                     <tr> 
                         <td class="table_d">
-                            <label class="requiredField1">Student Name: <?php echo $Studentname;?></label>
+                            <label class="requiredField6">Student Name: <?php echo $Studentname;?></label>
                             <input name="studentname" type="hidden" value="<?php echo $Studentname;?>">
                         </td>                      
                         <td class="table_d">

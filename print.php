@@ -3,9 +3,22 @@ session_start();
 require_once 'cookies.php';
 require_once 'config.php';
 
-$Firstname = $_SESSION['Firstname'];
-$Lastname = $_SESSION['Lastname'];
-$Studentname = $Firstname." ".$Lastname;
+$FirstName = $_SESSION['FirstName'];
+$LastName = $_SESSION['LastName'];
+$Findme = ' ';
+$pos = strpos($FirstName, $Findme);
+if($pos > 0){
+    $Fname = substr($FirstName,0,$pos);  
+}else{
+    $Fname = $FirstName;
+}
+$pos = strpos($LastName, $Findme);
+if($pos > 0){
+    $Lname = substr($LastName,0,$pos);  
+}else{
+    $Lname = $LastName;
+}
+$Studentname = $Fname." ".$Lname;
 $StudentID = $_SESSION['StudentID'];
 $Term = $_SESSION['Term'];
 $Year = $_SESSION['Year'];
@@ -110,7 +123,7 @@ if(isset($_POST["iebugaround"])){
             <table>
                 <tr> 
                     <td class="table_d">
-                        <label class="requiredField1">Student Name: <?php echo $Studentname;?></label>
+                        <label class="requiredField6">Student Name: <?php echo $Studentname;?></label>
                         <input name="Studentname" type="hidden" value="<?php echo $Studentname;?>">
                     </td>
                     <td class="table_d">

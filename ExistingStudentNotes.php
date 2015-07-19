@@ -3,11 +3,24 @@ session_start();
 require_once 'cookies.php';
 require_once 'config.php';
 
-        $FirstName = $_SESSION['FirstName'];
-        $LastName = $_SESSION['LastName'];
-        $FirstName1 = $_SESSION['FirstName1'];
-        $LastName1 = $_SESSION['LastName1'];
-        $StudentID = $_SESSION['StudentID'];
+$FirstName = $_SESSION['FirstName'];
+$LastName = $_SESSION['LastName'];
+$FirstName1 = $_SESSION['FirstName1'];
+$LastName1 = $_SESSION['LastName1'];
+$StudentID = $_SESSION['StudentID'];
+$Findme = '-';
+$pos = strpos($FirstName1, $Findme);
+if($pos > 0){
+    $FirstName1 = str_replace('-', ' ', $FirstName1);  
+}
+$pos = strpos($LastName1, $Findme);
+if($pos > 0){
+    $LastName1 = str_replace('-', ' ', $LastName1);  
+}
+//echo $FirstName."<br>";
+//echo $LastName."<br>";
+//echo $FirstName1."<br>";
+//echo $LastName1;
 $Term = $_SESSION['Term'];
 $Year = $_SESSION['Year'];
 if ($Year == 'y'){
@@ -82,6 +95,8 @@ if(isset($_POST["iebugaround"])){
             }
         }
         $conn->close();
+        $_SESSION['FirstName'] = $FirstName ;
+        $_SESSION['LastName'] = $LastName ;
         header('Location: print.php');
     } 
 }

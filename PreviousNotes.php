@@ -5,17 +5,15 @@ require_once 'config.php';
 
 $LastName = $_SESSION['LastName'];
 $StudentID = $_SESSION['StudentID'];
+$FirstName = $_SESSION['FirstName'];
+
 if(isset($_POST["iebugaround"])){
     if (isset($_POST['StudentName'])) {
-        $StudentName = $_POST['StudentName'];
-        $findme = '-';
-        $pos = strpos($StudentName, $findme);
-        $Fname = substr($StudentName,0,$pos);
-        $Lname = substr($StudentName,$pos+1);
+        $Fname = $_POST['Fname'];
+        $Lname = $_POST['Lname'];
         $_SESSION['FirstName1'] = $Fname;
         $_SESSION['LastName1'] = $Lname;
-        //echo $Fname;
-        //echo $Lname;
+        echo $Lname;
         header('Location: ExistingStudentNotes.php');
     }else{
         header('Location: PreviousNotes.php');
@@ -79,7 +77,11 @@ if(isset($_POST["iebugaround"])){
                     while($row = mysql_fetch_array($result)) {
                       $Fname = $row['Fname'];
                       $Lname = $row['Lname'];
-                      $StudentName = $Fname.'-'.$Lname;  
+                      $Fname = str_replace(' ', '-', $Fname);
+                      $Lname = str_replace(' ', '-', $Lname);
+                      echo "<input name=Fname type=hidden value=$Fname>";
+                      echo "<input name=Lname type=hidden value=$Lname>"; 
+                      $StudentName = $row['Fname'].'-'.$row['Lname'];
                       echo "<tr>";
                       echo "<td class = table_d1 width = 250><input type= radio name=StudentName value=$StudentName>".ucfirst(strtolower($Fname))." ".ucfirst(strtolower($Lname))."<br></td>";             
                       echo "</tr>";     
