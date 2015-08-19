@@ -42,7 +42,7 @@ $StudentID = $_POST['StudentID'];
         $errors[] = "Please input another Student ID, There is a Student exist with the current ID";
         $err = 5;
     }else{//review
-        $result = mysql_query("SELECT Fname FROM Grad_Students where SID =$StudentID AND Lname = '$LastName' AND Fname = '$FirstName'");
+        $result = mysql_query("SELECT Fname FROM Current_Students where SID =$StudentID AND Lname = '$LastName' AND Fname = '$FirstName'");
         if (mysql_num_rows($result)> 0) {
             $errors[] = "Please input another Student ID, There is a Student exist with the current ID";
             $err = 5;

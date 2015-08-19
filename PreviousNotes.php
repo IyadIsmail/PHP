@@ -6,17 +6,22 @@ require_once 'config.php';
 $LastName = $_SESSION['LastName'];
 $StudentID = $_SESSION['StudentID'];
 $FirstName = $_SESSION['FirstName'];
-
+//echo $LastName;
+//echo $FirstName;
 if(isset($_POST["iebugaround"])){
     if (isset($_POST['StudentName'])) {
-        $StudentName = $_POST['StudentName'];
+        $StudentName = htmlspecialchars($_POST['StudentName']);
         if ($StudentName == 'None'){
             $Fname = 'None';
             $Lname = 'None';
         }else{
-            $Fname = $_POST['Fname'];
-            $Lname = $_POST['Lname'];   
+            $Findme = '*';
+            $pos = strpos($StudentName, $Findme);
+            $Fname = substr($StudentName,0,$pos);
+            $Lname = substr($StudentName,$pos+1);   
         }
+        echo $Fname;
+        echo $Lname;
         $_SESSION['FirstName1'] = $Fname;
         $_SESSION['LastName1'] = $Lname;
         $_SESSION['StudentName'] = $StudentName;
@@ -74,7 +79,7 @@ if(isset($_POST["iebugaround"])){
                     mysql_connect($host, $username, $password) or
                     die("Could not connect: " . mysql_error());
                     mysql_select_db($db_name);
-                    if($LastName = ' '){
+                    if($LastName = 'None'){
                         $result = mysql_query("SELECT Fname,Lname FROM Advised_Students where SID = $StudentID");   
                     }else{
                         $result = mysql_query("SELECT Fname,Lname FROM Advised_Students where SID = $StudentID and Lname = '$LastName'");
@@ -87,7 +92,8 @@ if(isset($_POST["iebugaround"])){
                       $Lname = str_replace(' ', '-', $Lname);
                       echo "<input name=Fname type=hidden value=$Fname>";
                       echo "<input name=Lname type=hidden value=$Lname>"; 
-                      $StudentName = $row['Fname'].'-'.$row['Lname'];
+                      $StudentName = htmlspecialchars($Fname.'*'.$Lname);
+                      //$StudentName = $row['Fname'].'-'.$row['Lname'];
                       echo "<tr>";
                       echo "<td class = table_d1 width = 250><input type= radio name=StudentName value=$StudentName>".ucfirst(strtolower($Fname))." ".ucfirst(strtolower($Lname))."<br></td>";             
                       echo "</tr>";     

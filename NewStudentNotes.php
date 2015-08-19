@@ -6,7 +6,7 @@ require_once 'config.php';
 $FirstName = $_SESSION['FirstName'];
 $LastName = $_SESSION['LastName'];
 //echo $FirstName;
-echo $LastName;
+//echo $LastName;
 $Findme = ' ';
 $pos = strpos($FirstName, $Findme);
 if($pos > 0){
@@ -15,16 +15,16 @@ if($pos > 0){
     $Fname = $FirstName;
 }
 $pos = strpos($LastName, $Findme);
-echo $pos;
+//echo $pos;
 if($pos > 0){
     $Lname = substr($LastName,0,$pos);
 }else{
     $Lname = $LastName;
 }
 //echo $FirstName;
-echo $LastName;
+//echo $LastName;
 $Studentname = $Fname." ".$Lname;
-echo $Studentname;
+//echo $Studentname;
 $StudentID = $_SESSION['StudentID'];
 $Term = $_SESSION['Term'];
 $Year = $_SESSION['Year'];

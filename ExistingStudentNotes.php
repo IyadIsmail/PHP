@@ -9,6 +9,14 @@ $FirstName1 = $_SESSION['FirstName1'];
 $LastName1 = $_SESSION['LastName1'];
 $StudentID = $_SESSION['StudentID'];
 $Findme = '-';
+$pos = strpos($FirstName, $Findme);
+if($pos > 0){
+    $FirstName = str_replace('-', ' ', $FirstName);  
+}
+$pos = strpos($LastName, $Findme);
+if($pos > 0){
+    $LastName = str_replace('-', ' ', $LastName);  
+}
 $pos = strpos($FirstName1, $Findme);
 if($pos > 0){
     $FirstName1 = str_replace('-', ' ', $FirstName1);  
@@ -98,7 +106,7 @@ if(isset($_POST["iebugaround"])){
         $conn->close();
         $_SESSION['FirstName'] = $FirstName ;
         $_SESSION['LastName'] = $LastName ;
-        //header('Location: print.php');
+        header('Location: print.php');
     } 
 }
 
@@ -139,7 +147,7 @@ if(isset($_POST["iebugaround"])){
             <form action="#" method="post">
                 <input name="iebugaround" type="hidden" value="1">
                     <?php
-                        if($FirstName == ' '){
+                        if($FirstName == 'None'){
                             echo "<h3><font color=#999>&emsp;This Student have not Finished any course yet........</font></h3>";
                         }else{
                             $Courses_Finished = array(); 

@@ -2,10 +2,11 @@
 session_start();
 require_once 'config.php';
 require_once 'cookies.php';
+$error = 0;
 if(isset($_POST["iebugaround"])){
     if ($_POST['Upload_File']){
         if(!isset($_FILES['fileToUpload']) || $_FILES['fileToUpload']['error'] == UPLOAD_ERR_NO_FILE){
-            header('Location: test5.php');
+            header('Location: upload.php');
         }else{
             $_SESSION['FileTerm'] = $_POST['FileTerm'];
             $_SESSION['FileYear'] = $_POST['FileYear'];
@@ -15,24 +16,53 @@ if(isset($_POST["iebugaround"])){
             $FileType = pathinfo($target_file,PATHINFO_EXTENSION);
             // Check file size
             if ($_FILES['fileToUpload']['size'] > 500000) {
-                echo "Sorry, your file is too large.";
+                //echo "Sorry, your file is too large.";
                 $uploadOk = 0;
+                $error = 1;
             }
             // Allow certain file formats
-            if($FileType != 'csv') {
-                echo "Sorry, only csv files are allowed.";
+            elseif($FileType != 'csv') {
+                //echo "Sorry, only csv files are allowed.";
                 $uploadOk = 0;
+                $error = 2;
+            }
+            else{
+                $FileName = $_FILES['fileToUpload']['name'];
+                if ($FileName != "Student Course List.csv") {
+                    $uploadOk = 0;
+                    $error = 3;
+                }
             }
             // Check if $uploadOk is set to 0 by an error
-            if ($uploadOk == 0) {
-                echo "Sorry, your file was not uploaded.";
+            if ($uploadOk == 0) {  
+                if ($error == 1){
+                    echo '<script>';
+                    echo 'alert("Sorry, your file is too large.");';
+                    echo 'location.href="upload.php"';
+                    echo '</script>';
+                }elseif($error == 2){
+                    echo '<script>';
+                    echo 'alert("Sorry, only csv files are allowed.");';
+                    echo 'location.href="upload.php"';
+                    echo '</script>';                    
+                }elseif($error == 3){
+                    echo '<script>';
+                    echo 'alert("Sorry, incorrect filename.");';
+                    echo 'location.href="upload.php"';
+                    echo '</script>';                    
+                }else{
+                    $error = 0;
+                }
             // if everything is ok, try to upload file
             } else {
             if (move_uploaded_file($_FILES['fileToUpload']['tmp_name'], $target_file)) {
-                echo "The file ". basename( $_FILES['fileToUpload']['name']). " has been uploaded.";
-                header('Location: main.php');
+                //echo "The file ". basename( $_FILES['fileToUpload']['name']). " has been uploaded.";
+                    header('Location: main.php');
             } else {
-                echo "Sorry, there was an error uploading your file.";
+                echo '<script>';
+                echo 'alert("Sorry, there was an error uploading your file.");';
+                echo 'location.href="upload.php"';
+                echo '</script>';                
                 }
             }
         }

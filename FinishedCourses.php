@@ -6,6 +6,15 @@ require_once 'config.php';
 $LastName = $_SESSION['LastName'];
 $FirstName = $_SESSION['FirstName'];
 $StudentID = $_SESSION['StudentID'];
+$Findme = '-';
+$pos = strpos($FirstName, $Findme);
+if($pos > 0){
+    $FirstName = str_replace('-', ' ', $FirstName);  
+}
+$pos = strpos($LastName, $Findme);
+if($pos > 0){
+    $LastName = str_replace('-', ' ', $LastName);  
+}
 $Term = $_SESSION['Term'];
 $Year = $_SESSION['Year'];
 if ($Year == 'y'){

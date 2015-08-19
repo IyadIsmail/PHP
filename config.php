@@ -1,10 +1,9 @@
 <?php
 $host="localhost"; // Host name 
-$username="root"; // Mysql username 
-$password=""; // Mysql password 
+$username="iyad"; // Mysql username 
+$password="password"; // Mysql password 
 $db_name="wiu"; // Database name 
 $tbl_name="members"; // Table name 
-$tbl_name1="tt";
 
 date_default_timezone_set('America/Chicago');
 $y = date('Y');

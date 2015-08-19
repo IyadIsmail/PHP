@@ -58,7 +58,7 @@ if(isset($_POST["iebugaround"])){
                 mysql_connect($host, $username, $password) or
                     die("Could not connect: " . mysql_error());
                 mysql_select_db($db_name);
-                $res = mysql_query("SELECT Count(SID) FROM Grad_Students");
+                $res = mysql_query("SELECT Count(SID) FROM Current_Students");
                 $row = mysql_fetch_array($res);
                 $num_rows = $row[0];
                 $result = mysql_query("SELECT Course_Name FROM Core_Courses ORDER BY Course_Name");

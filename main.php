@@ -88,7 +88,7 @@ $FileYear = '';
                     if ($result->num_rows > 0)
                     {
                         if ($id != 0){
-                                $sql = "SELECT sid FROM Grad_Students where SID ='$id' AND Fname = '$fname' And Lname ='$lname'";
+                                $sql = "SELECT sid FROM Current_Students where SID ='$id' AND Fname = '$fname' And Lname ='$lname'";
                                 $result = $conn->query($sql);
                                 if ($result->num_rows > 0) { 
                                     $sql = "SELECT SID FROM Courses_Taken where SID ='$id' AND Fname = '$fname' And Lname ='$lname' AND Course_Name='$course'";
@@ -102,7 +102,7 @@ $FileYear = '';
                                         } 
                                     }
                                 }else{
-                                    $sql = "INSERT INTO Grad_Students VALUES ($id,'$fname','$lname')";
+                                    $sql = "INSERT INTO Current_Students VALUES ($id,'$fname','$lname')";
                                     if ($conn->query($sql) === TRUE) {
                                         //echo "New record created successfully";
                                     } else {

@@ -26,7 +26,7 @@ if(isset($_POST["iebugaround"])){
         mysql_select_db($db_name);
         $result = mysql_query("SELECT Fname FROM Advised_Students where SID =$StudentID");
         if (mysql_num_rows($result)== 0) {
-            $result = mysql_query("SELECT Fname FROM Grad_Students where SID =$StudentID");
+            $result = mysql_query("SELECT Fname FROM Current_Students where SID =$StudentID");
             if (mysql_num_rows($result)== 0) {
                 $errors[] = "Please input another Student, There is no Student exist with the Current Input";
                 $err = 3;
@@ -41,16 +41,11 @@ if(isset($_POST["iebugaround"])){
         mysql_connect($host, $username, $password) or
         die("Could not connect: " . mysql_error());
         mysql_select_db($db_name);
-        $result = mysql_query("SELECT Fname,Lname FROM Grad_Students where SID = $StudentID");
+        $result = mysql_query("SELECT Fname,Lname FROM Current_Students where SID = $StudentID");
         if (mysql_num_rows($result)== 0) {
             $_SESSION['FirstName'] = '';
             $_SESSION['LastName'] = '';
             header('Location: FinishedCourses.php');            
-        }elseif(mysql_num_rows($result)== 1){
-            $row = mysql_fetch_array($result);
-            $_SESSION['FirstName'] = $row['Fname'];
-            $_SESSION['LastName'] = $row['Lname'];
-            header('Location: FinishedCourses.php');
         }else{
             header('Location: GradChoose.php');
         }   
