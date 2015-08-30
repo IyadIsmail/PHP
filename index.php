@@ -47,18 +47,15 @@ if(!$errors){
     $myusername = mysql_real_escape_string($myusername);
     $mypassword = mysql_real_escape_string($mypassword);
 
-    $sql="SELECT * FROM $tbl_name WHERE username='$myusername' and password='$mypassword'";
+    $sql="SELECT * FROM $tbl_name WHERE UserName='$myusername' and Password='$mypassword'";
     $result = mysql_query($sql);
     $result_num = mysql_num_rows($result);
     
     if($result_num > 0){
 		while($row = mysql_fetch_array($result)){
-			$idsess = stripslashes($row["id"]);
-			$firstnamesess = stripslashes($row["firstname"]);
-			$username = stripslashes($row["username"]);
-			
+			$idsess = stripslashes($row["ID"]);
+			$username = stripslashes($row["UserName"]);
 			$_SESSION["SESS_USERID"] = $idsess;
-			$_SESSION["SESS_USERFIRSTNAME"] = $firstnamesess;
 			$_SESSION["SESS_USERNAME"] = $username;
 			setcookie("userloggedin", $username);
 			setcookie("userloggedin", $username, time()+43200); // expires in 1 hour
@@ -69,7 +66,6 @@ if(!$errors){
 		//tell there is no username etc
 		$errors[] = "Your username or password are incorrect";
                 $err = 3;
-                //echo "Your username or password are incorrect";
 	}
 }
 }else{
