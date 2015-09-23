@@ -88,7 +88,9 @@ if(isset($_POST["iebugaround"])){
             //echo "Error: " . $sql . "<br>" . $conn->error;
             }
         }
-        $sql = "INSERT INTO Advised_Notes VALUES ($StudentID,'$FirstName','$LastName', CURDATE(),'$Term','$y','$out','$courses')";
+        //echo $courses;
+        //echo $out;
+        $sql = "INSERT INTO Advised_Notes VALUES ($StudentID,'$FirstName','$LastName', CURDATE(),'$Term','$y','$courses','$out')";
         if ($conn->query($sql) === TRUE) {
             //echo "New record created successfully";
         } else {
@@ -181,8 +183,9 @@ if(isset($_POST["iebugaround"])){
                         mysql_connect($host, $username, $password) or
                             die("Could not connect: " . mysql_error());
                         mysql_select_db($db_name);
-                        $result = mysql_query("SELECT Date,Term,Year,Courses_Advised,Notes FROM Advised_Notes Where SID = $StudentID and Lname = '$LastName1' and Fname = '$FirstName1'");
+                        $result = mysql_query("SELECT Date,Term,Year,Advised_Notes,Other_Notes FROM Advised_Notes Where SID = $StudentID and Lname = '$LastName1' and Fname = '$FirstName1'");
                         $num_rows1 = mysql_num_rows($result);
+                        //echo $num_rows1;
                         if($num_rows == 0 & $num_rows1 == 0){
                             header('Location: NewStudent.php');
                         }
@@ -199,8 +202,8 @@ if(isset($_POST["iebugaround"])){
                             echo "<td class = table_d1 width = 250><center>Other Notes</center></td>";                
                             echo "</tr>";    
                             while($row = mysql_fetch_array($result)){ 
-                                $cor = str_replace(' ', '<br>', $row['Courses_Advised']);
-                                $out = str_replace(',', '<br>', $row['Notes']);
+                                $cor = str_replace(' ', '<br>', $row['Advised_Notes']);
+                                $out = str_replace(',', '<br>', $row['Other_Notes']);
                                 echo "<tr>"; 
                                 echo "<td class = table_d1 width = 120><center>".$row['Date']."<br>"."</center></td>"; 
                                 echo "<td class = table_d1 width = 250 style = padding-left:10px>".nl2br($cor)."<br>"."</td>"; 

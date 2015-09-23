@@ -20,8 +20,8 @@ if(isset($_POST["iebugaround"])){
             $Fname = substr($StudentName,0,$pos);
             $Lname = substr($StudentName,$pos+1);   
         }
-        echo $Fname;
-        echo $Lname;
+        //echo $Fname;
+        //echo $Lname;
         $_SESSION['FirstName1'] = $Fname;
         $_SESSION['LastName1'] = $Lname;
         $_SESSION['StudentName'] = $StudentName;

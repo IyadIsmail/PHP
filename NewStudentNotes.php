@@ -79,7 +79,7 @@ if(isset($_POST["iebugaround"])){
             } else {
                 echo "Error: " . $sql . "<br>" . $conn->error;
             }
-            $sql = "INSERT INTO Advised_Notes VALUES ($StudentID,'$FirstName','$LastName', CURDATE(),'$Term','$y','$out','$courses')";
+            $sql = "INSERT INTO Advised_Notes VALUES ($StudentID,'$FirstName','$LastName', CURDATE(),'$Term','$y','$courses','$out')";
             if ($conn->query($sql) === TRUE) {
             //echo "New record created successfully";
             } else {

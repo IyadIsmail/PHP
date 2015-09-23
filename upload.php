@@ -6,7 +6,7 @@ $error = 0;
 if(isset($_POST["iebugaround"])){
     if ($_POST['Upload_File']){
         if(!isset($_FILES['fileToUpload']) || $_FILES['fileToUpload']['error'] == UPLOAD_ERR_NO_FILE){
-            header('Location: upload.php');
+            header('Location: Upload.php');
         }else{
             $_SESSION['FileTerm'] = $_POST['FileTerm'];
             $_SESSION['FileYear'] = $_POST['FileYear'];
@@ -38,17 +38,17 @@ if(isset($_POST["iebugaround"])){
                 if ($error == 1){
                     echo '<script>';
                     echo 'alert("Sorry, your file is too large.");';
-                    echo 'location.href="upload.php"';
+                    echo 'location.href="Upload.php"';
                     echo '</script>';
                 }elseif($error == 2){
                     echo '<script>';
                     echo 'alert("Sorry, only csv files are allowed.");';
-                    echo 'location.href="upload.php"';
+                    echo 'location.href="Upload.php"';
                     echo '</script>';                    
                 }elseif($error == 3){
                     echo '<script>';
                     echo 'alert("Sorry, incorrect filename.");';
-                    echo 'location.href="upload.php"';
+                    echo 'location.href="Upload.php"';
                     echo '</script>';                    
                 }else{
                     $error = 0;
@@ -61,7 +61,7 @@ if(isset($_POST["iebugaround"])){
             } else {
                 echo '<script>';
                 echo 'alert("Sorry, there was an error uploading your file.");';
-                echo 'location.href="upload.php"';
+                echo 'location.href="Upload.php"';
                 echo '</script>';                
                 }
             }
